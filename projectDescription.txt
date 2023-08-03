@@ -1,0 +1,20 @@
+Project Description:
+
+- Design and create a database schema in MySQL
+  - The schema should allow for bookings to be made on any given nightthe club is operational
+  - This will be arranged according to events held by the club
+  - The bookings will be done according to the booths, tables and the lounge area
+  - Each of the bookings will have an alcohol and food selection to accompany the booking
+  - The tables in the databsae have a many to one relationship in which all of the tables has a connection to the booking table in the database.
+  - The database consists of 5 tables namely; alcohol_selection, food_selection, event_info, booth_info and booking.
+  - The database queries will be set up in such a way that the following information can be obtained:
+    - View all the bookings for the available events
+    - View all the bookings for a given date
+    - View booking information (event information, booth information, the name, surname, email and contact number of the user, the food and alcohol selection). 
+      This information should be sent to the user email as well as the admin email via PDF once the booking has been created and confirmed.
+    - Change bookings by ammending entries
+    - Delete bookings and events
+  - Suitable datatypes should be selected and all the primary keys are selected to be integers as they are the easiet to work with in this case.
+
+- Create the various routes and middlewares for the design project.
+- 
