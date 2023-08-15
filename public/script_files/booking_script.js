@@ -35,22 +35,55 @@ function ready(){
 }
 
  function removeCartItem(event){
+    var removeIndex
     var buttonClicked = event.target;
     buttonClickedParent = buttonClicked.parentElement
     buttonClickedParent.remove();
-    const indexToRemove = parseInt(this.getAttribute('data-index'), 10)
-    
+    //const indexToRemove = parseInt(this.getAttribute('data-index'), 10)
+    console.log(buttonClicked);
+    console.log(buttonClickedParent);
+    const eventID = buttonClickedParent.querySelector(".cart-event-id").value;
+    const boothID = buttonClickedParent.querySelector(".cart-booking-type-id").value;
+    const alcoholID = buttonClickedParent.querySelector(".cart-alcohol-id").value;
+    // Use the dynamicIndex to remove the corresponding item from the array
+    console.log("Values from hiddent input: ", eventID, boothID, alcoholID)
+    const indexToRemove = recordForDb.findIndex(item =>(
+        item.eventIDValue === eventID &&
+        item.boothIDValue === boothID &&
+        item.alcoholIDValue === alcoholID
+    ));
+
+    console.log(indexToRemove);
     recordForDb.splice(indexToRemove, 1);
     updateCartTotal();
     
     
-        dataIndex = indexToRemove - 1;
+        dataIndex = recordForDb.length -1;
     
     console.log(recordForDb);
     console.log("data index to remove: ",indexToRemove);
     console.log("data index: ", dataIndex)
    
 }
+/*function removeCartItem(dynamicIndex) {
+    const eventID = document.querySelector(`.cart-item[data-index="${dynamicIndex}"] .cart-event-id`).value;
+    const boothID = document.querySelector(`.cart-item[data-index="${dynamicIndex}"] .cart-booking-type-id`).value;
+    const alcoholID = document.querySelector(`.cart-item[data-index="${dynamicIndex}"] .cart-alcohol-id`).value;
+    // Use the dynamicIndex to remove the corresponding item from the array
+
+    var itemIndex =  cart.findIndex(item =>
+        item.eventIDValue === eventID &&
+        item.boothIDValue === boothID &&
+        item.alcoholIDValue === alcoholID
+      );
+      if (itemIndex !== -1) {
+        cart.splice(itemIndex, 1);
+      }
+    //cartArray.splice(dynamicIndex, 1);
+      console.log(itemIndex);
+    // Refresh the cart display or perform any other necessary updates
+    updateCartTotal();
+}*/
 
 function updateCartTotal() {
     var cartItemContainer = document.getElementsByClassName("cart-items")[0];
@@ -119,7 +152,7 @@ function addItemsToCart(){
         boothID.selectedIndex = 0;
         alcoholID.selectedIndex = 0;
         foodID.selectedIndex = 0;
-        createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSelected, alcoholPrice, foodPrice);
+        createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSelected, alcoholPrice, foodPrice, eventIDValue, boothIDValue, alcoholIDValue);
         updateCartTotal();
         recordForDb.push({userName, userSurname, email, contactNumber, eventIDValue, boothIDValue, alcoholIDValue, foodIDValue});
     
@@ -143,8 +176,7 @@ function submitCart(){
     
 }
 
-function createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSelected, alcoholPrice, foodPrice){
-   
+function createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSelected, alcoholPrice, foodPrice, eventIDValue, boothIDValue, alcoholIDValue){
     var cartEntry = document.createElement("div");
     cartEntry.classList.add("cart-row");
     var cartItems = document.getElementsByClassName("cart-items")[0];
@@ -159,6 +191,9 @@ function createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSele
     <div class="cart-food cart-column">${foodSelected}</div>
     <span class="cart-price cart-column">R ${totalPrice}</span>
     <button class="btn btn-danger remove-button" data-index="${dataIndex}" type="button">REMOVE</button>
+    <input type="hidden" class="cart-event-id" value="${eventIDValue}">
+    <input type="hidden" class="cart-booking-type-id" value="${boothIDValue}">
+    <input type="hidden" class="cart-alcohol-id" value="${alcoholIDValue}">
     `
     cartEntry.innerHTML = cartEntryContents;
     cartItems.append(cartEntry);
@@ -173,13 +208,16 @@ function createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSele
         <div class="cart-food cart-column">No Food Selected</div>
         <span class="cart-price cart-column">R ${totalPrice}</span>
         <button class="btn btn-danger remove-button" data-index="${dataIndex}" type="button">REMOVE</button>
+        <input type="hidden" class="cart-event-id" value="${eventIDValue}">
+        <input type="hidden" class="cart-booking-type-id" value="${boothIDValue}">
+        <input type="hidden" class="cart-alcohol-id" value="${alcoholIDValue}">
         `
         cartEntry.innerHTML = cartEntryContents;
         cartItems.append(cartEntry);
         cartEntry.getElementsByClassName("btn-danger")[0].addEventListener("click", removeCartItem); 
     }
     dataIndex ++;
-    console.log("Data Index after added item: ", dataIndex);
+    console.log("Data Index after added item: ", dataIndex, "event_id: ", eventIDValue, "booth_id: ", boothIDValue, "alcohol_id: ", alcoholIDValue);
      
 }
 

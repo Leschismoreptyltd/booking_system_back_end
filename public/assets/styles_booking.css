@@ -13,6 +13,7 @@
 
 body{
     background: black;
+    font-family: "Montserrat", sans-serif;
 }
 
 /* Booking Form Styling*/
@@ -136,6 +137,8 @@ button[type="submit"] {
 h2{
     color:white;
     text-decoration: underline;
+    
+
 }
 span{
     color:var(--gen-fnt-color);
