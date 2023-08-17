@@ -1,0 +1,61 @@
+<!-- bookings.ejs -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Booking Details</title>
+ 
+</head>
+<body>
+  <h1>Booking Details</h1>
+  <form class="event-form" action="/event_detail" method="post">
+    <select name="event_id" id="event_id" required>
+        <option value="">Please select an event.</option>
+        <% events.forEach(event => { %>
+          <option value="<%= event.event_id %>"><%= event.eventType %></option>
+        <% }); %>
+      </select><br>
+      <input type="submit" value="submit">
+  </form>
+ 
+  <table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Event</th>
+            <th>Booking Date</th>
+            <th>Booking type</th>
+            <th>Pax</th>
+            <th>Alcohol Package</th>
+            <th>Alcohol Price</th>
+            <th>Food Package</th>
+            <th>Food Price</th>
+            <th>Contact Number</th>
+            <th>Email</th>
+            <th>Date Booked</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+      <% for (const booking of bookings) { %>
+        <tr>
+            <td><%= booking.Name %></td>
+            <td><%= booking.Event %></td>
+            <td><%= booking['Booking Date'] %></td>
+            <td><%= booking['Booking type'] %></td>
+            <td><%= booking.Pax %></td>
+            <td><%= booking['Alcohol Package'] %></td>
+            <td><%= booking['Alcohol Price'] %></td>
+            <td><%= booking['Food Package'] %></td>
+            <td><%= booking['Food Price'] %></td>
+            <td><%= booking['Contact Number'] %></td>
+            <td><%= booking.Email %></td>
+            <td><%= booking['Date Booked'] %></td>
+            <td><%= booking.Total %></td>
+        </tr>
+    <% } %>
+    </tbody>
+</table>
+
+</body>
+</html>

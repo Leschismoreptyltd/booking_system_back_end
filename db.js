@@ -63,9 +63,36 @@ export async function getBookingInfoByID(bookingId){
     return row;
 }
 
-export async function getSpecBooking(id){
-    const [row]= await pool.query("SELECT * FROM booking WHERE booking_id = ?", [id])
-    return row;
+export async function getSpecBooking(eventID){
+
+ try{
+    
+    const [row]= await pool.query(`SELECT
+    CONCAT(b.name, ' ', b.surname) AS "Name",
+        e.description AS "Event",
+        e.event_date AS "Booking Date",
+        bo.type AS "Booking type",
+        bo.seating AS "Pax",
+        a.description AS "Alcohol Package",
+        a.pricing AS "Alcohol Price",
+        COALESCE(f.description, "No Food") AS "Food Package",
+        COALESCE(f.pricing, 0) AS "Food Price",
+        b.contact_number AS "Contact Number",
+        b.email AS "Email",
+        b.booking_date AS "Date Booked",
+        (a.pricing + COALESCE(f.pricing, 0)) AS "Total"
+    FROM booking b
+    LEFT JOIN event_info e ON b.event_id = e.event_id
+    LEFT JOIN booth_info bo ON b.booth_id = bo.booth_id
+    LEFT JOIN alcohol_selection a ON b.alcohol_id = a.alcohol_id
+    LEFT JOIN food_selection f ON b.food_id = f.food_id
+    WHERE e.event_id = ?;`, [eventID])
+ return row;
+}catch(error){
+    console.error('Error fetching event by ID:', error);
+    throw error;
+}   
+    
 }
 //Summary Queries
 export async function getEventById(event_id){
@@ -149,10 +176,29 @@ export async function getBoothDetails(){
     }
 }
    
-export async function getTest(){
+export async function getTest(event_id){
     try{
-    const[results] = await pool.query("SELECT booth_id, CONCAT(type,' - ',CONVERT(seating, CHAR)) AS boothType FROM booth_info WHERE available = true");
-    console.log('Available Booths:', results);
+    const[results] = await pool.query(`SELECT
+    CONCAT(b.name, ' ', b.surname) AS "Name",
+    e.description AS "Event",
+    e.event_date AS "Booking Date",
+    bo.type AS "Booking type",
+    bo.seating AS "Pax",
+    a.description AS "Alcohol Package",
+    a.pricing AS "Alcohol Price",
+    COALESCE(f.description, "No Food") AS "Food Package",
+    COALESCE(f.pricing, 0) AS "Food Price",
+    b.contact_number AS "Contact Number",
+    b.email AS "Email",
+    b.booking_date AS "Date Booked",
+    (a.pricing + COALESCE(f.pricing, 0)) AS "Total"
+FROM booking b
+LEFT JOIN event_info e ON b.event_id = e.event_id
+LEFT JOIN booth_info bo ON b.booth_id = bo.booth_id
+LEFT JOIN alcohol_selection a ON b.alcohol_id = a.alcohol_id
+LEFT JOIN food_selection f ON b.food_id = f.food_id
+WHERE e.event_id = ?;`, [event_id])
+    console.log('Booking info:', results);
         return results;
     }catch(error){
         console.error("Error in fetching booth details: ", error)
@@ -210,6 +256,18 @@ export async function getAvailableBooths(eventId){
         console.error('Error fetching available booths from db:', error);
         throw error;
       }
+}
+
+export async function adminUserLogin(username, password){
+    try{
+
+        const [rows] = await pool.query('SELECT * FROM admin_user WHERE username = ? AND password = ?', [username, password]);
+        return rows;
+
+    } catch(error){
+    console.log("Error in fetching booth details: ", error)
+    throw error;
+    }
 }
 
 

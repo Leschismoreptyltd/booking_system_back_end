@@ -1,4 +1,5 @@
 import express from "express";
+import session from "express-session";
 import dotenv from "dotenv";
 dotenv.config();
 import bodyParser from "body-parser";
@@ -16,7 +17,9 @@ import {getBookings, getBookingInfo,
     getEventById,
     getBoothById,
     getAlcoholById,
-    getFoodById} from "./db.js"
+    getFoodById,
+    adminUserLogin,
+    getBookingInfoByID} from "./db.js"
     import path from'path'
 
 const app = express();
@@ -24,6 +27,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
 app.set("view engine", "ejs");
 app.use('/public', express.static('public'));
+
+app.use(session({
+  secret: 'your_secret_key',
+  resave: true,
+  saveUninitialized: true
+}));
 
 
 app.get("/", (req, res) =>{
@@ -51,17 +60,18 @@ app.get("/make-bookings", async (req, res) => {
     }
 });
 
+
 app.get("/make_booking", async (req,res) =>{
     const mkBookings = await populateEventDropBox()
     const events = mkBookings;
     res.render("booking", {events})
 })
 
-app.get("/bookings/:id", async (req, res) =>{
-    const id = req.params.id
-    const booking = await getSpecBooking(id)
-    res.send(booking)
-})
+//app.get("/bookings/:id", async (req, res) =>{
+//    const id = req.params.id
+//    const booking = await getSpecBooking(id)
+//    res.send(booking)
+//})
 
 app.get("/booking-detail/:name,:surname", async (req, res) =>{
     
@@ -142,6 +152,72 @@ app.get('/getAvailableBooths', async (req, res) => {
     }
   });
 
+  //login route
+app.get("/admin_login", async (req,res) =>{
+  res.render("admin_login");
+});
+
+app.get("/admin", async (req, res) =>{
+  try{
+    const events = await getEventDetails();
+  res.render("admin" ,{events})
+  }catch(error){
+    console.error("Error rendering booking: ", error);
+    res.sendStatus(500)
+}
+
+});
+
+app.post("/event_detail", async (req, res) =>{
+  const eventID = req.body.event_id;
+  //console.log("ID: ", eventID);
+  try{
+    const bookingDetails = await getSpecBooking(eventID);
+    const events = await getEventDetails();
+    console.log(bookingDetails);
+    res.render("adminpop", { bookings: bookingDetails, events: events });
+
+  }catch(error){
+    console.error("Error rendering booking: ", error);
+    res.sendStatus(500)
+}
+
+});
+
+app.post("/login_admin", async (req, res) =>{
+
+  const { username, password } = req.body;
+  //console.log(req.body);
+  //console.log("username: ", username, "password: ", password);
+  try{ 
+    const rows = await adminUserLogin(username, password);
+    console.log("results: ", rows);
+    
+    if(rows.length === 1){
+
+      req.session.loggedIn = true;
+      res.redirect("/admin");
+
+    } else{
+
+      res.send("Invalid username or password")
+
+    }
+  } catch(error){
+
+    console.error(error);
+    res.status(500).send("Error occured");
+
+  }
+});
+
+app.get("/booking/:bookingID", async (req, res) =>{
+  const booking_id =req.params.bookingID
+  const results = await getTest(booking_id);
+  res.send(results)
+
+});
+
 app.listen(process.env.PORT, ()=>{
     console.log("Server is running on port 3000")
-})
+});
