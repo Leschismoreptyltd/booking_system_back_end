@@ -21,7 +21,8 @@ import {getBookings, getBookingInfo,
     getFoodById,
     adminUserLogin,
     addEvent,
-    addAdvertising} from "./db.js"
+    addAdvertising,
+    getAdvertisingImages} from "./db.js"
     import path from'path'
     //import {generatePDF} from "./pdf.js";
 
@@ -160,6 +161,23 @@ app.get("/up_and_coming", async (req, res) =>{
   
   res.render("up_and_coming");
 });
+
+app.get("/get_images", async (req, res) =>{
+  const results = await getAdvertisingImages();
+  console.log("Query results: ", results);
+
+  res.send(results);
+  /*const groupedImages = {};
+    results.forEach(image => {
+      const start = image.display_start_date;
+      if (!groupedImages[start]) {
+        groupedImages[start] = [];
+      }
+      groupedImages[start].push(image);
+    });
+    console.log(groupedImages);
+    res.json(groupedImages);*/
+  });
 
 app.post("/event_detail", async (req, res) =>{
   const eventID = req.body.event_id;

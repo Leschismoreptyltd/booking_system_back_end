@@ -293,6 +293,17 @@ export async function addAdvertising(name, fileName, startDate, endDate){
     }
 }
 
+export async function getAdvertisingImages(){
+    try{
+        const rows = await pool.query(`SELECT file_path FROM advertisements
+        WHERE CURDATE() BETWEEN display_start_date AND display_end_date`);
+        return rows;
+        } catch{
+        console.log("Error in fetching booth details: ", error)
+        throw error;
+        }
+}
+
 
 
 

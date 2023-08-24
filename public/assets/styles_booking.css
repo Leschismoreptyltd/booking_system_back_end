@@ -1,5 +1,8 @@
 :root{
     --gen-fnt-color:white;
+    --greenSeaweed: rgba(2, 128, 144, 1);
+    --blueQueen: rgba(69, 105, 144, 1);
+    --redFire: rgb(0, 0, 0);
 }
 ::-webkit-input-placeholder {
     font-style: italic;
@@ -43,26 +46,26 @@ body{
     
 }
 
-.advertising {
+/*.advertising {
     width:20%;
     height: 10vw;
     padding-right: 20px;
-    border: 2px solid white;
-    background:white;
-}
+}*/
 
 /* Style the cart section */
 form {
     width: 30vw;
     /*max-width: 700px;
     min-width: 300px;*/
-    margin: 0 auto;
+    margin-left: 300px;
     background-color: #f5f5f5;
     padding-left: 2em;
     padding-right:2em;
     padding-top: 1em;
     padding-bottom:1.5em;
     border-radius: 5px;
+    transition:transform 300ms, box-shadow 300ms;
+    box-shadow: 5px 10px 10px rgba(var(--greenSeaweed), 0.2);
   }
 h3{
     font-weight: 400;
@@ -140,9 +143,9 @@ input[type="email"] {
     
 }
 
-section{
+/*section{
     background:white;
-}
+}*/
 
 
 .booking-heading {
@@ -228,5 +231,26 @@ h2{
     padding: 5px;
 }
 
+.slider-frame{
+    overflow: hidden;
+    height: 250px;
+    width: 300px;
+    margin-left:0;
+    
+}
 
+.advertising{
+    
+    width:375px;
+    height: 285px;
+    margin-top: 100px;
+    position: fixed;
+}
+.slide{
+    top: 0;
+    left: 0;
+    
+}
+
+  
 

@@ -1,5 +1,6 @@
 var recordForDb = []
 var dataIndex =0;
+  
 if(document.readyState == "loading"){
 document.addEventListener("DOMContentLoaded", ready)
 } else {
@@ -28,9 +29,10 @@ function ready(){
     // Event listener for cart submission
     const submitCartButton = document.getElementById('submitCart');
     submitCartButton.addEventListener("click", submitCart);
-
-    /*const testButton = document.getElementById("test");
-    testButton.addEventListener("click", clearCart);*/
+    
+    //Slideshow prep and initiate
+    fetchData();
+    
        
 }
 
@@ -65,7 +67,6 @@ function ready(){
     console.log("data index: ", dataIndex)
    
 }
-
 
 function updateCartTotal() {
     var cartItemContainer = document.getElementsByClassName("cart-items")[0];
@@ -243,5 +244,76 @@ function getAvailableBooths(){
         .catch(error => {
         console.error('Error fetching available booths:', error);
     });
+}
+
+async function fetchData(){
+    console.log("fetching data")
+    fetch('/get_images')
+      .then(response => response.json())
+      .then(data => {
+        //console.log(data);
+        populateSlideshow(data)
+    })
+    
+}
+
+function populateSlideshow(images) {
+    const slideshowContainer = document.getElementById("slide-images");
+    console.log(slideshowContainer);
+    fileNames = images[0];
+    for(i = 0; i < fileNames.length; i++){
+        console.log(i);
+        console.log(fileNames[i].file_path);
+        const slideshowGroup = document.createElement("div");
+        slideshowGroup.className = "img-container";
+
+        const img = document.createElement("img");
+        img.src = `/uploads/${fileNames[i].file_path}`;
+        img.alt = "Advertising Image";
+        img.className = "slide";
+        
+        slideshowGroup.append(img);
+        slideshowContainer.append(slideshowGroup);
+        slideAnimation()
+    }
+
+function slideAnimation(){
+
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+
+    function showSlide(slideIndex) {
+    // Hide all slides
+    for (let i = 0; i < slides.length; i++) {
+      slides[i].style.display = 'none';
+    }
+
+    // Show the specified slide
+    slides[slideIndex].style.display = 'block';
+    }
+
+    function nextSlide() {
+        currentSlide++;
+        if (currentSlide >= slides.length) {
+          currentSlide = 0;
+        }
+        showSlide(currentSlide);
+     }
+
+  function previousSlide() {
+    currentSlide--;
+    if (currentSlide < 0) {
+      currentSlide = slides.length - 1;
+    }
+    showSlide(currentSlide);
+  }
+
+  // Show the initial slide
+  showSlide(currentSlide);
+
+  // Change slide every 3 seconds (adjust the timing as needed)
+  setInterval(nextSlide, 3000);
+}
+  
 }
 
