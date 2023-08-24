@@ -1,9 +1,9 @@
 /*menu bar styling*/
 :root {
     --home-bg-color: #000000;
-    --menu-bg-color: #cbcbc2;
+    --menu-bg-color: #d3d3d3;
     --silde-btn-border: #777777;
-    --slide-btn-bg: #aaaaaa;
+    --slide-btn-bg: #d3d3d3;
     --slide-btn-hoverbg: #f1fff1;
     --alpha-green: rgba(91, 33, 96, 0.51);
     --icon-hover-color: #474747;

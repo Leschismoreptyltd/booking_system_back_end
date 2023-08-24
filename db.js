@@ -69,7 +69,7 @@ export async function getSpecBooking(eventID){
     
     const [row]= await pool.query(`SELECT
     CONCAT(b.name, ' ', b.surname) AS "Name",
-        e.description AS "Event",
+        e.event_name AS "Event",
         e.event_date AS "Booking Date",
         bo.type AS "Booking type",
         bo.seating AS "Pax",
@@ -157,7 +157,7 @@ export async function getFoodById(food_id){
 
 export async function getEventDetails() {
     try{
-    const [results] = await pool.query("SELECT event_id, event_date, CONCAT(description, ' - ', CONVERT(event_date, CHAR)) AS eventType FROM event_info WHERE event_date >= CURDATE()");
+    const [results] = await pool.query("SELECT event_id, event_date, CONCAT(event_name, ' - ', CONVERT(event_date, CHAR)) AS eventType FROM event_info WHERE event_date >= CURDATE()");
     return results;
     }
     catch(error){
@@ -265,6 +265,29 @@ export async function adminUserLogin(username, password){
         return rows;
 
     } catch(error){
+    console.log("Error in fetching booth details: ", error)
+    throw error;
+    }
+}
+
+export async function addEvent(eventDate, eventName, description, posterPath){
+    try{
+
+        const [rows] = await pool.query('INSERT INTO event_info (event_date, event_name, description, poster_path)\
+        VALUES (?, ?, ?, ?)', [eventDate, eventName, description, posterPath]);
+        return rows;
+
+    } catch(error){
+    console.log("Error in fetching booth details: ", error)
+    throw error;
+    }
+} 
+
+export async function addAdvertising(name, fileName, startDate, endDate){
+    try{
+    const rows = await pool.query('INSERT INTO advertisements (name, file_path, display_start_date, display_end_date ) VALUES (?, ?, ?, ?)', [name, fileName, startDate, endDate]);
+    return rows;
+    } catch{
     console.log("Error in fetching booth details: ", error)
     throw error;
     }

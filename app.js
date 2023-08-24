@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import bodyParser from "body-parser";
 import { fileURLToPath } from 'url';
+import multer from "multer";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -19,8 +20,11 @@ import {getBookings, getBookingInfo,
     getAlcoholById,
     getFoodById,
     adminUserLogin,
-    getBookingInfoByID} from "./db.js"
+    addEvent,
+    addAdvertising} from "./db.js"
     import path from'path'
+    //import {generatePDF} from "./pdf.js";
+
 
 const app = express();
 app.use(bodyParser.json());
@@ -33,6 +37,10 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
+ 
+
+const upload = multer({dest: __dirname + "/uploads"});
+app.use('/uploads', express.static('uploads')); 
 
 
 app.get("/", (req, res) =>{
@@ -82,45 +90,9 @@ app.get("/booking-detail/:name,:surname", async (req, res) =>{
 })
 
 // Route for handling form submission
-app.post('/submit_booking', async (req, res) => {
-    // Retrieve form data
-    //const { event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email } = req.body;
-    
-    const bookings = req.body.recordForDb;
-    //console.log(bookings);
-    Promise.all(
-    bookings.map(booking => {
-      const name = booking.userName;
-      const surname = booking.userSurname;
-      const email = booking.email;
-      const contactNumber = booking.contactNumber;
-      const event_id = booking.eventIDValue;
-      const booth_id = booking.boothIDValue;
-      const alcohol_id = booking.alcoholIDValue;
-      const food_id = booking.foodIDValue;
-      console.log("Booking Values:", event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email);
-      return createBooking(event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email)
-    })
-    )
-    
-    .then(results => {
-      console.log('Bookings inserted successfully:', results);
-      res.sendStatus(200); // Respond with a success status
-    })
-    .catch(error => {
-      console.error('Error inserting bookings:', error);
-      res.status(500).send('Error inserting bookings');
-    });
-      //const{event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email} = booking;
-      
-     // await createBooking(booking);
-    //await createBooking(event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email)
-   
-    //const bookingDetail = getBookingInfo(req.body.name, req.body.surname)
-    
-  });
 
-  app.get('/summary/:name/:surname/:contactNumber/:email/:event_id/:booth_id/:alcohol_id/:food_id', async (req, res) =>{
+
+app.get('/summary/:name/:surname/:contactNumber/:email/:event_id/:booth_id/:alcohol_id/:food_id', async (req, res) =>{
     const { name, surname, email, contactNumber, event_id, booth_id, alcohol_id, food_id } = req.body;
     const eventDescription = await getEventById(event_id)
     const booth = await getBoothById(booth_id)
@@ -128,7 +100,7 @@ app.post('/submit_booking', async (req, res) => {
     const food = await getFoodById(food_id)
     console.log("Query Data: ", eventDescription, booth, alcohol, food, name, surname, contactNumber, email)
     //res.render("summary",{eventDescription, booth, alcohol, food, name, surname, contactNumber, email})
-  });
+});
   
 
 app.use((err, req, res, next) => {
@@ -150,7 +122,7 @@ app.get('/getAvailableBooths', async (req, res) => {
       console.error('Error fetching available booths:', error);
       res.status(500).json({ error: 'Error fetching available booths from app' });
     }
-  });
+});
 
   //login route
 app.get("/admin_login", async (req,res) =>{
@@ -167,15 +139,40 @@ app.get("/admin", async (req, res) =>{
 }
 
 });
+app.get("/booking/:bookingID", async (req, res) =>{
+  const booking_id =req.params.bookingID
+  const results = await getTest(booking_id);
+  res.send(results)
+
+});
+
+app.get("/bookingsTable", async(req, res, next) =>{
+  const pdf = generatePDF(req.body);
+  console.log("body: ", req.body);
+});
+
+app.get("/photo_gallery", async (req, res) =>{
+  
+  res.render("photo_gallery");
+});
+
+app.get("/up_and_coming", async (req, res) =>{
+  
+  res.render("up_and_coming");
+});
 
 app.post("/event_detail", async (req, res) =>{
   const eventID = req.body.event_id;
-  //console.log("ID: ", eventID);
+  console.log("ID: ", eventID);
   try{
     const bookingDetails = await getSpecBooking(eventID);
+    const event_name = req.body.event_name;
+    const event_date = req.body.event_date;
     const events = await getEventDetails();
     console.log(bookingDetails);
-    res.render("adminpop", { bookings: bookingDetails, events: events });
+    console.log("Event Name: ", event_name, "Event Date: ", event_date);
+    console.log("Event name and date: ", event_name, event_date)
+    res.render("adminpop", { bookings: bookingDetails, events: events, eventName: event_name, eventDate: event_date });
 
   }catch(error){
     console.error("Error rendering booking: ", error);
@@ -210,13 +207,83 @@ app.post("/login_admin", async (req, res) =>{
 
   }
 });
-
-app.get("/booking/:bookingID", async (req, res) =>{
-  const booking_id =req.params.bookingID
-  const results = await getTest(booking_id);
-  res.send(results)
-
+app.post('/submit_booking', async (req, res) => {
+  // Retrieve form data
+  //const { event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email } = req.body;
+  
+  const bookings = req.body.recordForDb;
+  //console.log(bookings);
+  Promise.all(
+  bookings.map(booking => {
+    const name = booking.userName;
+    const surname = booking.userSurname;
+    const email = booking.email;
+    const contactNumber = booking.contactNumber;
+    const event_id = booking.eventIDValue;
+    const booth_id = booking.boothIDValue;
+    const alcohol_id = booking.alcoholIDValue;
+    const food_id = booking.foodIDValue;
+    console.log("Booking Values:", event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email);
+    return createBooking(event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email)
+  })
+  )
+  
+  .then(results => {
+    console.log('Bookings inserted successfully:', results);
+    res.sendStatus(200); // Respond with a success status
+  })
+  .catch(error => {
+    console.error('Error inserting bookings:', error);
+    res.status(500).send('Error inserting bookings');
+  });
+    //const{event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email} = booking;
+    
+   // await createBooking(booking);
+  //await createBooking(event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email)
+ 
+  //const bookingDetail = getBookingInfo(req.body.name, req.body.surname)
+  
 });
+app.post("/uploadEvent", upload.single("file"), async (req, res) =>{
+
+  const eventDetails = req.body;
+  const eventName = eventDetails.name;
+  const eventDate = eventDetails.eventDate;
+  const eventDescription = eventDetails. eventDescription;
+  const fileDetail = req.file;
+  const fileName = req.file.filename
+  console.log("Detail: ", req.body, "File Name: ", req.file);
+  console.log("Event Name: ",eventName ,"Event Date: ",eventDate ,"Event Description: ",eventDescription ,"File Name:",fileName)
+  
+  addEvent(eventDate, eventName, eventDescription, fileName);
+  
+});
+
+app.post("/upload-advertisement", upload.array("files", 20), async (req, res) =>{
+
+  const body = req.body;
+  const name = body.name;
+  const display_start_date = body.startDate;
+  const display_end_date = body.endDate;
+  const fileNames = req.files.map(file => file.filename);
+  console.log(req.body);
+  console.log(req.files);
+  console.log("Deconstructed body: ", name, display_start_date, display_end_date);
+  console.log("Deconstructed files: ", fileNames);
+  console.log("Deconstructed body: ", fileNames[1]);
+
+  for (let i = 0; i < fileNames.length; i++){
+    addAdvertising(name, fileNames[i], display_start_date, display_end_date);
+  }
+
+
+
+})
+
+app.post("/upload-photo-album", async (req, res) =>{
+  
+})
+
 
 app.listen(process.env.PORT, ()=>{
     console.log("Server is running on port 3000")

@@ -27,10 +27,10 @@ function ready(){
 
     // Event listener for cart submission
     const submitCartButton = document.getElementById('submitCart');
-    submitCartButton.addEventListener('click', () => {
-      submitCart();
-    });
+    submitCartButton.addEventListener("click", submitCart);
 
+    /*const testButton = document.getElementById("test");
+    testButton.addEventListener("click", clearCart);*/
        
 }
 
@@ -65,25 +65,7 @@ function ready(){
     console.log("data index: ", dataIndex)
    
 }
-/*function removeCartItem(dynamicIndex) {
-    const eventID = document.querySelector(`.cart-item[data-index="${dynamicIndex}"] .cart-event-id`).value;
-    const boothID = document.querySelector(`.cart-item[data-index="${dynamicIndex}"] .cart-booking-type-id`).value;
-    const alcoholID = document.querySelector(`.cart-item[data-index="${dynamicIndex}"] .cart-alcohol-id`).value;
-    // Use the dynamicIndex to remove the corresponding item from the array
 
-    var itemIndex =  cart.findIndex(item =>
-        item.eventIDValue === eventID &&
-        item.boothIDValue === boothID &&
-        item.alcoholIDValue === alcoholID
-      );
-      if (itemIndex !== -1) {
-        cart.splice(itemIndex, 1);
-      }
-    //cartArray.splice(dynamicIndex, 1);
-      console.log(itemIndex);
-    // Refresh the cart display or perform any other necessary updates
-    updateCartTotal();
-}*/
 
 function updateCartTotal() {
     var cartItemContainer = document.getElementsByClassName("cart-items")[0];
@@ -120,7 +102,6 @@ function addItemsToCart(){
     var email = emailID.value
     var contactNumber = contactNumberID.value;
     //console.log(userName, userSurname, email, contactNumber);
-    var eventIDValue = eventID.value;
     var boothIDValue = boothID.value;
     var alcoholIDValue = alcoholID.value;
     var foodIDValue = foodID.value;
@@ -164,16 +145,32 @@ function addItemsToCart(){
 
 }
 
-function submitCart(){
+async function submitCart(){
 
     let body = JSON.stringify({recordForDb});
-   fetch("/submit_booking",
+    //console.log("Body: ", body);
+   await fetch("/submit_booking",
    {method:"post", 
     body:body,
     headers: {
       'Content-Type': 'application/json'
     }});
-    
+    alert("Thank you for placing a booking. For more informtaion please contact Cellars at 078 555 2525.")
+    clearCart()
+    updateCartTotal()    
+}
+
+function completePurchase(){
+    submitCart
+    clearCart
+}
+function clearCart() {
+
+    var cartItems = document.getElementsByClassName("cart-items")[0];
+    console.log(cartItems);
+    while (cartItems.hasChildNodes()) {
+        cartItems.removeChild(cartItems.firstChild);
+    }
 }
 
 function createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSelected, alcoholPrice, foodPrice, eventIDValue, boothIDValue, alcoholIDValue){
@@ -184,7 +181,6 @@ function createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSele
     if(foodSelected !== "Please select your food choice"){
     var totalPrice = alcoholPrice + foodPrice
     var cartEntryContents = `
-    <hr class="cart-separator">
     <div class="cart-event cart-column">${eventSelected}</div>
     <div class="cart-booking-type cart-column">${boothSelected}</div>
     <div class="cart-alcohol cart-column">${alcoholSelected}</div>

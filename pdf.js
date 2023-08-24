@@ -1,7 +1,7 @@
-import PDFDocument from "pdfkit";
+/*import PDFDocument from "pdfkit";
 import fs from "fs";
 
-export function generatePDF (bookingDetail){
+export function generatePDF (data){
 
   const doc = new PDFDocument();
   const filename = `booking_summary_${bookingDetail.name}_${bookingDetail.surname}.pdf`;
@@ -17,7 +17,7 @@ export function generatePDF (bookingDetail){
   doc.end();
 
   return filename;
-}
+}*/
 
 
 async function generateAndHandlePDF() {

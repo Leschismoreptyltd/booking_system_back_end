@@ -10,38 +10,37 @@
     font-style: italic;
     
   }
-
+*, *::before, *::after{
+    font-family: "Montserrat", sans-serif;
+    box-sizing: border-box;
+}
 body{
     background: black;
-    font-family: "Montserrat", sans-serif;
+    box-sizing: border-box;
 }
 
 /* Booking Form Styling*/
 .header{
     display: flex;
     justify-content: space-around;
-    border: 2px solid white;
+    
 }
 
-.header a{
-    left:0;
-    margin:0;
-    border: 2px solid white;
-}
+
   
 .header img{
-    position: absolute;
+    position: relative;
     top:0;
-    width:100px;
-    height:100px;
-    border: 2px solid white;
+    width:150px;
+    aspect-ratio: 1/1;
+   
 }
 
 .main-container {
     display: flex;
     align-items: flex-start;
     padding: 10px;
-    border: 2px solid white;
+    
 }
 
 .advertising {
@@ -49,103 +48,121 @@ body{
     height: 10vw;
     padding-right: 20px;
     border: 2px solid white;
+    background:white;
 }
 
 /* Style the cart section */
-.cart-section {
-    width:60%;
-    text-align: center;
-    height: 100%;
-    border: 2px solid white;
+form {
+    width: 30vw;
+    /*max-width: 700px;
+    min-width: 300px;*/
+    margin: 0 auto;
+    background-color: #f5f5f5;
+    padding-left: 2em;
+    padding-right:2em;
+    padding-top: 1em;
+    padding-bottom:1.5em;
+    border-radius: 5px;
+  }
+h3{
+    font-weight: 400;
 }
 
-.form-container {
-    width:30%;
-    background-color: #f5f5f5;
-    border-radius: 5px;
-    padding:15px;
-    border: 2px solid white;
+input,
+select {
+  margin: 10px 0 0 0;
+  width: 100%;
+  min-height: 2em;
 }
 
 .form-container h2 {
     margin-top: 0;
-    border: 2px solid white;
 }
 
 /* Apply a common style to labels */
 label {
+    margin-top: 5px;
     display: block;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
  
 }
 
 /* Apply a common style to text input fields */
-input[type="text"],
+/*input[type="text"],
 input[type="email"] {
-    width: 90%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
-
-/* Apply a common style to option boxes */
-select {
     width: 96%;
     padding: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 5px;
+}*/
+
+/* Apply a common style to option boxes */
+/*select {
+    width: 96%;
+    padding: 5px;
     border-radius: 5px;
     background-color: #f5f5f5;
     font-size: 14px;
     margin-bottom: 15px;
-}
+}*/
 
 /* Apply style to the submit button */
-button[type="submit"] {
-    position: absolute;
-    left: 105px;
-    color: var(--gen-fnt-color);
-    padding: 10px 15px;
-    border: none;
+.submit-cart {
+    margin:15px;
+    /*color: black;
+    padding: 1px 5px;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    height:45px;*/
+}
+.add-event-button, .submit-cart{
+   margin-top:20px;
 }
 
-/* Style the back button */
-.back-button {
-    display: inline-block;
+
+/* Style the back button*/
+.backButton {
+    position:absolute;
+    height: 50px;
+    background-color: white;
+    margin-top:15px;
+    left: 25px;
+    color: black;
     padding: 10px 15px;
-    background-color: #ccc;
-    color: --gen-fnt-color;
-    text-decoration: none;
+    border:1px solid black;
     border-radius: 5px;
-    margin-top: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    
 }
+
+section{
+    background:white;
+}
+
 
 .booking-heading {
     font-size: 3.5rem;
     white-space: wrap;
     cursor: pointer;
-    color: rgb(97, 97, 97);
+    color: white;
     margin: 20px;
-    border: 2px solid white;
+    text-decoration: underline;
+    
 }
 
 h2{
-    color:white;
+    color:black;
     text-decoration: underline;
-    
+    font-weight: 500;
 
 }
-span{
-    color:var(--gen-fnt-color);
-}
-.cart-column{
-    color:var(--gen-fnt-color);
-}
+
+
 /* Responsive adjustments */
 @media screen and (max-width: 1000px) {
   .container, .justified-paragraph {
@@ -168,9 +185,20 @@ span{
       flex: 1;
     }
 }
+.cart-section {
+    width:55%;
+    text-align: center;
+    height: 100%;
+    background-color: #f5f5f5;
+    color: black;
+    border-radius: 5px;
+    margin-left: 5px;
+}
 .cart-price {
+    position: relative;
     width: 20%;
-    font-size: 1.2em;
+    
+    color:black;
 }
 .cart-row{
     display: flex;
@@ -183,41 +211,22 @@ span{
     padding-bottom: 10px;
 }
 .btn-danger {
-    height:20px;
-    width:70px;
+    height:30px;
+    width:80px;
     color: white;
     background-color: #585858;
     border: none;
-    border-radius: .3em;
+    border-radius: 5px;
     font-weight: bold;
+    margin-right: 5px
 }
-.cart-total-title {
-    font-weight: bold;
-    font-size: 1.5em;
-    color: black;
-    margin-right: 20px;
-}
-.cart-total-title {
-    font-weight: bold;
-    font-size: 1.5em;
-    color: rgb(255, 255, 255);
-    margin-right: 20px;
-}
-
-.cart-total-price {
+.cart-total {
     position: relative;
-    color: #fcfcfc;
-    font-size: 1.1em;
+    font-weight: bold;
+    font-size: 1.25em;
+    text-align: left;
+    padding: 5px;
 }
 
-.cart-total-price{
-    white-space: nowrap;
-    height: 20px;
-    width: 60px;
-}
 
-.cart-separator {
-    border-top: 2px solid #ddd; /* Adjust the color and style as needed */
-    margin: 10px 0; /* Add spacing above and below the separator */
-}
 

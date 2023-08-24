@@ -1,13 +1,19 @@
-<!-- bookings.ejs -->
+
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booking Details</title>
- 
+  <link rel="stylesheet" href="/public/assets/styles_admin.css">
+  <script src="/public/script_files/admin_script.js" async></script>
+  
 </head>
 <body>
+  <div id="bookingInfo">
   <h1>Booking Details</h1>
+  <div id="bookingForm">
   <form class="event-form" action="/event_detail" method="post">
     <select name="event_id" id="event_id" required>
         <option value="">Please select an event.</option>
@@ -15,9 +21,14 @@
           <option value="<%= event.event_id %>"><%= event.eventType %></option>
         <% }); %>
       </select><br>
-      <input type="submit" value="submit">
+      <input type="hidden" name="event_name" id="event_name">
+      <input type="hidden" name="event_date" id="event_date">
+      <button id="submitButton" type="submit" >View Bookings</button>
   </form>
- 
+  </div>
+  <!--<button id="showEvents">Show Bookings</button>-->
+  
+  <div id="bookingsTable">
   <table>
     <thead>
         <tr>
@@ -31,15 +42,81 @@
             <th>Food Package</th>
             <th>Food Price</th>
             <th>Contact Number</th>
-            <th>Email</th>
-            <th>Date Booked</th>
+            <!--<th>Email</th>
+            <th>Date Booked</th>-->
             <th>Total</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tableBody">
         
     </tbody>
 </table>
 
+</div>
+</div>
+<div id="uploadEvents">
+  <h1>Upload Event</h1>
+  <div id="eventUpload">
+    <form action="/uploadEvent"method="Post" enctype="multipart/form-data">
+      <label for="eventName">Event Name: </label>
+      <input type="text" name="eventName" id="eventName" required>
+      <label for="eventDate">Event Date: </label>
+      <input type="date" name="eventDate" id="eventDate" required>
+      <label for="poasterFileUpload">File Upload: </label>
+      <input type="file" accept="image/*" id="posterFileUpload" name="posterFileUpload" required>
+      <label for="eventDescription">Event Description: </label>
+      <textarea name="eventDescription" id="eventDescription" cols="50" rows="10"></textarea>
+    </form>
+    <button id="uploadEvent">Upload</button>
+  </div>
+</div>
+
+<div id="advertisingUpload">
+  <h1>Upload Adverts</h1>
+  <div id="advertUpload">
+    <form action="/upload-advertisement" method="POST" enctype="multipart/form-data">
+
+      <label for="name">Enter Advertising Name or Description:</label>
+      <input type="text" name="name" id="name" placeholder="Advertisement Name" required>
+      <label for="advertisingStartDate">Advertising Campaign Start Date:</label>
+      <input type="date" name="advertisingStartDate" id="advertisingStartDate" required>
+      <label for="advertisingEndDate">Advertising Campaign End Date:</label>
+      <input type="date" name="advertisingEndDate" id="advertisingEndDate" required>
+      <label for="advertisementImage">Upload Advetising Posters: </label>
+      <input type="file" name="advertisementImage" id="advertisementImage" multiple accept="image/*">
+      <!--<input type="submit" id="submitAdvertisementUpload" value="Upload">-->
+
+    </form>
+    <button  id="submitAdvertisementUpload">Upload</button>
+  </div>
+</div>
+
+<div id="photoAlbumUploads">
+  <h1>Upload Photos Albums</h1>
+  <div id="photoUpload">
+    <form action="/upload-photo-album" method="POST" enctype="multipart/form-data">
+      <fieldset id="eventSection">
+
+        <select name="event_id" id="event_id" required>
+        <option value="">Please select an event.</option>
+        <% events.forEach(event => { %>
+          <option value="<%= event.event_id %>"><%= event.eventType %></option>
+        <% }); %>
+      </select><br>
+      <input type="hidden" name="event_name" id="event_name">
+      <input type="hidden" name="event_date" id="event_date">
+  
+    </fieldset>
+
+    <fieldset id="uploadSection">
+
+      <label for="photoAlbumFileUpload">Select Photos for Album</label>
+      <input type="file" id="photoAlbumFileUpload" name="photoAlbumFileUpload" multiple accept="image/*">
+
+    </fieldset>
+  </form>
+  <button  id="submitPhotoUpload">Upload</button>
+  </div>
+</div>
 </body>
 </html>

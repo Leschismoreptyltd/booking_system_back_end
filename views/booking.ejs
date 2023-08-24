@@ -2,22 +2,44 @@
 <html>
 
 <head>
-  <title>Booking Form</title>
+  <title>Event Bookings</title>
   <link rel="stylesheet" href="/public/assets/styles_booking.css" type="text/css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="/public/script_files/booking_script.js" async></script>
 </head>
 
 <body>
   <div class="header">
-  <a class="back-button" href="/">Back to Home</a>
+  <div class="backButton"><a href="/"><i class="fa fa-home w3-xxlarge"></i></a></div>
   <img src="/public/logos/cellars-logo-white-website.png" alt="">
-  <h1 class="booking-heading">Booking Form</h1>
+  <h1 class="booking-heading">Event Bookings</h1>
 </div>
   <div class="main-container">
   
-  <div class="advertising"></div>
+  <section arai-label="Avertising Space">
+    <div class="advertising"> 
+      <ul>
+       <li class="slide">
+         <img src="/uploads/skyy-vodka.jpg" alt="Nature Image #1">
+       </li>
+       <li class="slide">
+         <img src="/public/uploads/redBull.jpg" alt="Jose Cuervo Picture">
+       </li>
+       <li class="slide">
+         <img src="/uploads/russian-bear.jpg" alt="Jose Cuervo Picture">
+       </li><li class="slide">
+         <img src="/public/uploads/slide1.jpg.jpg" alt="Jose Cuervo Picture">
+       </li>
+         
+     </ul>
+   </div>
+  </section>
+  
+</section>
   <div class="form-container">
   <form class="booking-form" action="/submit_booking" method="post">
+    <h2>Booking Form</h2>
       <label for="name">Name:</label>
       <input type="text" name="name" id="name" placeholder = "Required" required><br>
 
@@ -30,7 +52,6 @@
       <label for="email">Email:</label>
       <input type="email" name="email" id="email" placeholder = "Required" required><br>
 
-      <!-- ... other HTML code ... -->
 
 <label for="event_id">Event:</label>
 <select name="event_id" id="event_id" required>
@@ -50,7 +71,7 @@
 
 <label for="selectAlcoholType">Alcohol Selection:</label>
 <select name="alcohol_id" id="alcohol_id" required>
-  <option value="">Please select an alcohol package</option>
+  <option value="">Please select alcohol package</option>
   <% alcohol.forEach(alcoholItem => { %>
     <option value="<%= alcoholItem.alcohol_id %>"><%= alcoholItem.alcoholType %></option>
   <% }); %>
@@ -63,12 +84,9 @@
     <option value="<%= foodItem.food_id %>"><%= foodItem.foodType %></option>
   <% }); %>
 </select><br>
-<!--<input type="submit" value="Submit">-->
-
-
-
+<button class="btn btn-primary add-event-button" type="button">ADD TO CART</button>
   </form>
-  <button class="btn btn-primary add-event-button" type="button">ADD TO CART</button>
+  
   
   </div>
   <div class="cart-section">
@@ -79,14 +97,17 @@
     </div>
     
       
-    </div>
+  
     <div class="cart-total">
       <strong class="cart-total-title">Total</strong>
-      <span class="cart-total-price">R 0</span>
+      <strong class="cart-total-price">R 0</strong>
     </div>
-    <button class="submit-cart"  id="submitCart">Submit Cart</button>
+    <button class="submit-cart"  id="submitCart" type="button">Submit Cart</button>
+  </div>
+   
   </div>
   </div>
+  <!--<button class="test" id="test">Test</button>-->
   
   
   
