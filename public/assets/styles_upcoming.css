@@ -1,0 +1,123 @@
+:root {
+  --home-bg-color: #000000;
+  --menu-bg-color: #d3d3d3;
+  --silde-btn-border: #777777;
+  --slide-btn-bg: #d3d3d3;
+  --slide-btn-hoverbg: #f1fff1;
+  --alpha-green: rgba(91, 33, 96, 0.51);
+  --icon-hover-color: #474747;
+  --icon-hover-bg: #bec0bf;
+  --text-color: #3b3a3a;
+  --border-color: #c3c5c4;
+  --heading-color: #797979;
+  --box-shadow-color: #b5b5ac;
+  --lightest-green: #b1b1b1;
+  --light-green: #9ab09a;
+  --dark-green: rgba(0, 0, 0, 0.86);
+  --box-shadow: 0px 0px 3px 5px var(--box-shadow-color);
+  --border-radius: 60px 5px;
+  --fade-green: rgba(30, 39, 32, 0.55);
+}
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+body,
+html {
+  /*width: 100%;*/
+  font-size: 10px;
+  color: var(--text-color);
+  font-weight: normal;
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--home-bg-color);
+  
+}
+#top-right-ribbon{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background-image: url("/public/resources/andrew-kliatskyi-DGXdp29Y5cc-unsplash.jpg");
+  opacity: 0.2;
+  border: 2px solid white;
+}
+.header{
+  display: flex;
+  justify-content: space-around;
+  
+}
+
+.header img{
+  position: relative;
+  top:0;
+  width:150px;
+  aspect-ratio: 1/1;
+ 
+}
+.logo{
+margin: auto;
+position: relative;
+width: 300px;
+height:300px;
+display: flex;
+}
+img{
+margin:auto;
+object-fit:contain;
+width:100%;
+}
+h1{
+  font-size: 3.5rem;
+  white-space: wrap;
+  color: black;
+  margin: 20px;
+  text-decoration: underline;
+  background:white;
+}
+#top-right-ribbon{
+position: absolute;
+}
+.main-container {
+  
+  display: flex;
+  justify-items: space-evenly;
+  padding: 10px;
+  flex-wrap: wrap; 
+  overflow: auto; 
+  border: 2px solid white;  
+}
+
+
+.image-view{
+  border:2px solid white;
+  display: grid;
+  gap: 1rem;
+  grid-auto-flow: column;
+  grid-auto-columns: 30%;
+  
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+.event-card{
+  display: grid;
+  grid-template-rows: min-content;
+  padding: 1rem;
+  background: rgb(36, 36, 36);
+  border-radius: 10px;
+}
+.event-card > .event-poster > img{
+  inline-size:100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+.snaps-inline{
+  scroll-snap-type: inline mandatory;
+  scroll-padding-inline: 1rem;
+}
+
+.snaps-inline > *{
+  scroll-snap-align: start;
+}

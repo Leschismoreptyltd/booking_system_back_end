@@ -157,7 +157,7 @@ export async function getFoodById(food_id){
 
 export async function getEventDetails() {
     try{
-    const [results] = await pool.query("SELECT event_id, event_date, CONCAT(event_name, ' - ', CONVERT(event_date, CHAR)) AS eventType FROM event_info WHERE event_date >= CURDATE()");
+    const [results] = await pool.query("SELECT event_id, event_date, CONCAT(event_name, '  ', CONVERT(event_date, CHAR)) AS eventType FROM event_info WHERE event_date >= CURDATE()");
     return results;
     }
     catch(error){
@@ -245,6 +245,7 @@ export async function createBooking(event_id, booth_id, alcohol_id, food_id, nam
         
       }
 }
+
 export async function getAvailableBooths(eventId){
     try{
         const [results] = await pool.query(`
@@ -302,6 +303,16 @@ export async function getAdvertisingImages(){
         console.log("Error in fetching booth details: ", error)
         throw error;
         }
+}
+export async function getEventImageFileName(){
+    try{
+        const rows = await pool.query(`SELECT event_date, poster_path FROM event_info
+        WHERE event_date >= CURDATE();`);
+        return rows;
+    }catch{
+        console.log("Error in fetching booth details: ", error)
+        throw error;  
+    }
 }
 
 

@@ -29,244 +29,51 @@
   }
   body,
   html {
-    width: 100%;
+    /*width: 100%;*/
     font-size: 10px;
     color: var(--text-color);
     font-weight: normal;
     font-family: "Montserrat", sans-serif;
     background-color: var(--home-bg-color);
-  }
-  
-  #ham-menu {
-    display: none;
-  }
-  label[for="ham-menu"] {
-    display: block;
-    position: fixed;
-    top: 24px;
-    left: 20px;
-    z-index: 999;
-    width: 60px;
-    height: 60px;
-    background-color: var(--home-bg-color);
-    border-radius: 15px;
-    border: 2px solid var(--border-color);
-  }
-  .ham-menu {
-    width: 25vw;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    visibility: hidden;
-    transform: translate(-110%);
-    z-index: 998;
-    background-color: var(--lightest-green);
-    transition: 2s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .ham-menu > ul {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-around;
-    padding: 20px;
-    height: 50%;
-  }
-  .ham-menu > ul > li a{
-    font-size: 2.5rem;
-    white-space: wrap;
-    /*letter-spacing: 0.15em;*/
-    cursor: pointer;
-    color: rgb(97, 97, 97);
-  }
-  #ham-menu:checked + label {
-    background-color: transparent;
-    border-color: var(--dark-green);
-  }
-  #ham-menu:checked ~ div.ham-menu {
-    transform: translate(0px);
-    visibility: visible;
-  }
-  .full-page-green {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--dark-green);
-    z-index: 997;
-    opacity: 0;
-    visibility: hidden;
-    display: none;
-    transition: 500ms;
-    position: fixed;
-    top: 0;
-    left: 0;
-  }
-  #ham-menu:checked ~ div.full-page-green {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-  }
-  [for="ham-menu"] > div {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-flow: column wrap;
-    align-content: center;
-    align-items: center;
-  }
-  .menu-line {
-    display: block;
-    width: 17px;
-    height: 2px;
-    margin: 10px 0 5px;
-    border-top-left-radius: 2px;
-    border-bottom-left-radius: 2px;
-    background-color: var(--border-color);
-    transition: 500ms;
-    transform-origin: right center;
-  }
-  [for="ham-menu"] > div > span:nth-child(4),
-  [for="ham-menu"] > div > span:nth-child(5),
-  [for="ham-menu"] > div > span:nth-child(6) {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-    transform-origin: left center;
-  }
-  #ham-menu:checked + label span {
-    background-color: var(--dark-green);
-  }
-  #ham-menu:checked + label span:nth-child(2),
-  #ham-menu:checked + label span:nth-child(5) {
-    transform: scale(0);
-  }
-  #ham-menu:checked + label span:nth-child(1) {
-    transform: translateY(17px) rotate(45deg);
-  }
-  #ham-menu:checked + label span:nth-child(4) {
-    transform: translateY(17px) rotate(-45deg);
-  }
-  #ham-menu:checked + label span:nth-child(3) {
-    transform: translateY(-17px) rotate(-45deg);
-  }
-  #ham-menu:checked + label span:nth-child(6) {
-    transform: translateY(-17px) rotate(45deg);
-  }
-  p {
-    display: inline;
-    font-size: 1.8rem;
-    line-height: 1.5em;
-    word-spacing: 0.5em;
-    letter-spacing: 0.1em;
-    font-family: "OpenSansCondensed-Light";
-  }
-  a {
-    font-size: 1.6rem;
-    line-height: 1.5em;
-    word-spacing: 0.1em;
-    letter-spacing: 0.1em;
-    font-family: "OpenSansCondensed-Light";
-    display: inline;
-    font-weight: bold;
-    padding: 7px;
-    color: var(--icon-hover-bg);
-  }
-  a::after {
-    content: "\e806";
-    display: inline-block;
-    font-family: fontello;
-    padding: 5px;
-    font-size: 1.6rem;
-    transform: rotate(-90deg);
-  }
-  .text {
-    font-size: 2.5rem;
-    line-height: 1.5em;
-    word-spacing: 0.5em;
-    letter-spacing: 0.1em;
-    font-family: "OpenSansCondensed-Bold", sans-serif;
-  }
-  .title {
-    font-size: 3rem;
-    line-height: 1.5em;
-    word-spacing: 0.5em;
-    letter-spacing: 0.1em;
-    font-family: "OpenSansCondensed-Bold", sans-serif;
-    color: var(--icon-hover-bg);
-    padding: 10px;
-  }
-  .heading {
-    font-size: 6rem;
-    line-height: 1.5em;
-    word-spacing: 0.5em;
-    letter-spacing: 0.1em;
-    font-family: "Patua One";
-  }
-  .centre-text {
-    text-align: center;
-  }
-  .bold-text {
-    font-weight: bold;
-  }
-
-  /*Logo styling*/
-  img, .logo{
-    position: relative;
-    left:35%;
-    top: 35%;
-    width: 20vw;
-    height: auto;
-    margin:0;
     
   }
-  /*paragraph styling*/
-  .justified-paragraph{
-    text-align: justify;
-    position: absolute;
-    width: 60vw;
-    height:50vw;
-    top:20vw;
-    left:25vw;
-    padding: 2.5vw;
-    font-style: italic;
+  #top-right-ribbon{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-image: url("/public/resources/andrew-kliatskyi-DGXdp29Y5cc-unsplash.jpg");
+    opacity: 0.15
   }
-  p span{
-    font-weight: bold;
-  }
-  img, .heading{
-    position: absolute;
-    left:25%;
-    top:25%;
-    display: block;
-    max-width:1000px;
-    max-height:250px;
-    width: auto;
-    height: auto;
-  }
-
-  @media screen and (max-width: 1000px) {
-    .container, .justified-paragraph{
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .justified-paragraph{
-      top:40%;
-      left: 35%;
-    }
-    .logo{
-      max-width: 50%; /* Adjust the value as needed */
-  }
+ .logo{
+  margin: auto;
+  position: relative;
+  width: 300px;
+  height:300px;
+  display: flex;
+ }
+ img{
+  margin:auto;
+  object-fit:contain;
+  width:100%;
+ }
+ .content{
+  margin: auto;
+  width:750px;
+  margin-top: 25px;
   
-    .advertising,
-    .form-container,
-    .cart-section, p {
-        flex: 1;
-    }
-  }
-  a{
-    all:unset;
-  }
+ }
+ #top-right-ribbon{
+  position: absolute;
+ }
+ .content p{
+  font-style: italic;
+  font-size:20px;
+  display: inline;
+  font-size: 1.8rem;
+  line-height: 1.5em;
+  word-spacing: 0.5em;
+  letter-spacing: 0.1em;
+  font-family: "OpenSansCondensed-Light"; 
+  color:#696969;
+ }
+ 

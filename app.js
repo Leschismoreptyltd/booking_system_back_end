@@ -22,7 +22,8 @@ import {getBookings, getBookingInfo,
     adminUserLogin,
     addEvent,
     addAdvertising,
-    getAdvertisingImages} from "./db.js"
+    getAdvertisingImages,
+    getEventImageFileName} from "./db.js"
     import path from'path'
     //import {generatePDF} from "./pdf.js";
 
@@ -48,12 +49,10 @@ app.get("/", (req, res) =>{
 res.render("index")
 });
 
-
-
 app.get("/bookings", async (req, res) => {
     const bookings = await getBookings()
     res.send(bookings)
-})
+});
 
 app.get("/make-bookings", async (req, res) => {
     try{
@@ -69,12 +68,11 @@ app.get("/make-bookings", async (req, res) => {
     }
 });
 
-
 app.get("/make_booking", async (req,res) =>{
     const mkBookings = await populateEventDropBox()
     const events = mkBookings;
     res.render("booking", {events})
-})
+});
 
 //app.get("/bookings/:id", async (req, res) =>{
 //    const id = req.params.id
@@ -88,10 +86,9 @@ app.get("/booking-detail/:name,:surname", async (req, res) =>{
     const surname = req.params.surname
     const bookingDetail = await getBookingInfo(name, surname)
     res.send(bookingDetail)
-})
+});
 
 // Route for handling form submission
-
 
 app.get('/summary/:name/:surname/:contactNumber/:email/:event_id/:booth_id/:alcohol_id/:food_id', async (req, res) =>{
     const { name, surname, email, contactNumber, event_id, booth_id, alcohol_id, food_id } = req.body;
@@ -110,6 +107,7 @@ app.use((err, req, res, next) => {
 })
 
 // Route to handle AJAX request for available booths
+
 app.get('/getAvailableBooths', async (req, res) => {
     try {
       const eventId = req.query.eventId;
@@ -125,7 +123,8 @@ app.get('/getAvailableBooths', async (req, res) => {
     }
 });
 
-  //login route
+//login route
+
 app.get("/admin_login", async (req,res) =>{
   res.render("admin_login");
 });
@@ -140,6 +139,7 @@ app.get("/admin", async (req, res) =>{
 }
 
 });
+
 app.get("/booking/:bookingID", async (req, res) =>{
   const booking_id =req.params.bookingID
   const results = await getTest(booking_id);
@@ -157,9 +157,9 @@ app.get("/photo_gallery", async (req, res) =>{
   res.render("photo_gallery");
 });
 
-app.get("/up_and_coming", async (req, res) =>{
+app.get("/upcoming", async (req, res) =>{
   
-  res.render("up_and_coming");
+  res.render("upcoming");
 });
 
 app.get("/get_images", async (req, res) =>{
@@ -167,17 +167,13 @@ app.get("/get_images", async (req, res) =>{
   console.log("Query results: ", results);
 
   res.send(results);
-  /*const groupedImages = {};
-    results.forEach(image => {
-      const start = image.display_start_date;
-      if (!groupedImages[start]) {
-        groupedImages[start] = [];
-      }
-      groupedImages[start].push(image);
-    });
-    console.log(groupedImages);
-    res.json(groupedImages);*/
-  });
+});
+
+app.get("/get_posters", async (req, res) =>{
+  const results = await getEventImageFileName();
+  console.log("Event Results", results[0]);
+  res.send(results);
+})
 
 app.post("/event_detail", async (req, res) =>{
   const eventID = req.body.event_id;
@@ -225,6 +221,7 @@ app.post("/login_admin", async (req, res) =>{
 
   }
 });
+
 app.post('/submit_booking', async (req, res) => {
   // Retrieve form data
   //const { event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email } = req.body;
@@ -262,6 +259,7 @@ app.post('/submit_booking', async (req, res) => {
   //const bookingDetail = getBookingInfo(req.body.name, req.body.surname)
   
 });
+
 app.post("/uploadEvent", upload.single("file"), async (req, res) =>{
 
   const eventDetails = req.body;
@@ -296,12 +294,10 @@ app.post("/upload-advertisement", upload.array("files", 20), async (req, res) =>
 
 
 
-})
+});
 
 app.post("/upload-photo-album", async (req, res) =>{
-  
-})
-
+});
 
 app.listen(process.env.PORT, ()=>{
     console.log("Server is running on port 3000")

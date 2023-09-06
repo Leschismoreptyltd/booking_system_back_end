@@ -1,109 +1,143 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <title>Event Bookings</title>
-  <link rel="stylesheet" href="/public/assets/styles_booking.css" type="text/css">
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="/public/script_files/booking_script.js" async></script>
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Bookings</title>
+    <link rel="stylesheet" href="/public/assets/styles_booking.css" type="text/css">
+    <link rel="stylesheet" href="/public/assets/styles_menu.css" type="text/css">
+    <script src="/public/script_files/booking_script.js" async></script>
+  </head>
 
-<body>
-  <div class="header">
-  <div class="backButton"><a href="/"><i class="fa fa-home w3-xxlarge"></i></a></div>
-  <img src="/public/logos/cellars-logo-white-website.png" alt="">
-  <h1 class="booking-heading">Event Bookings</h1>
-</div>
-  <div class="main-container">
-  
-    <section aria-label="Advertising Space">
-      <div class="advertising">
-        <div class="slider-frame">
-          <div id="slide-images">
+  <body>
+    <div id="top-right-ribbon">
+      
+      <div class="menubar">
+        <input type="checkbox" id="ham-menu">
+        <label for="ham-menu">
+          <div class="hide-des">
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+          </div>     
+        </label>
 
+        <div class="full-page-green"></div>
+        <div class="ham-menu">
+          <ul class="centre-text bold-text">
+            <li><a href="/">Home</a></li>
+            <li><a href="photo_gallery">Photo Gallery</a></li>
+            <li><a href="upcoming">Upcoming Events</a></li>
+            <li><a href="admin_login">Admin</a></li>
+            <li>Support</li>
+            <li>Contact us</li>
+        
+          </ul>
+        </div>
+      </div>
+      <div class="header over-ribbon">
+        <img src="/public/logos/cellars-logo-white-website.png" alt="">
+        <div class="booking-heading"><h1>Event Bookings</h1></div>
+      </div>
+
+      <div class="main-container over-ribbon" id="over-ribbon">
+        <div id="terms-and-conditions-wrap">
+          <div id="bookingterms">
+            <h5 id="booking-terms-headng">Message from the Cellars Team:</h5>
+            <p>General online reservations will be accepted until 19:00 on the day you wish to make a reservation. For reservations after that time, please contact the reservation reception staff directly by phone. <br>Your reservation is only valid until 21:00 on the evening of the event and shoud there be any reason for you to not be able to make it before the time. please arrange with the staff. A partial refund will be available for missed bookings.<br></p>
+
+            <p>Should you have any requests on a specifc booth or area, please contact us via whatsapp, phone call or email. We do not allow anyone under the age of 21 to enter.<br></p>
+              
+            <p>ID on request, so please be sure to bring a government-issued photo ID.<br><span> ROAR</span></p>
+            
           </div>
         </div>
+      
         
+        <div class="advertising">
+          <div class="slider-frame">
+            <div id="slide-images">
+
+            </div>
+          </div>        
+        </div>
+        
+        
+        <div class="form-container">
+          <form id="booking-form" class="booking-form login" action="/submit_booking" method="post">
+            <h2>Booking Form</h2>
+              <label for="name">Name:</label>
+              <input type="text" name="name" id="name" placeholder = "Required" required><br>
+
+              <label for="surname">Surname:</label>
+              <input type="text" name="surname" id="surname" placeholder = "Required" required><br>
+
+              <label for="contactNumber">Contact Number:</label>
+              <input type="text" name="contactNumber" id="contactNumber"placeholder = "Required"  required><br>
+
+              <label for="email">Email:</label>
+              <input type="email" name="email" id="email" placeholder = "Required" required><br>
+
+
+              <label for="event_id">Event:</label>
+              <select name="event_id" id="event_id" required>
+                <option value="">Please select an event.</option>
+                  <% events.forEach(event => { %>
+                <option value="<%= event.event_id %>"><%= event.eventType %></option>
+                  <% }); %>
+              </select><br>
+
+              <label for="selectBoothType">Booking Type:</label>
+              <select name="booth_id" id="booth_id" required>
+                <option value="">Please select a booth.</option>
+                <% booths.forEach(booth => { %>
+                <option value="<%= booth.booth_id %>"><%= booth.boothType%> Seater</option>
+                <% }); %>
+              </select><br>
+
+              <label for="selectAlcoholType">Alcohol Selection:</label>
+              <select name="alcohol_id" id="alcohol_id" required>
+                <option value="">Please select alcohol package</option>
+                <% alcohol.forEach(alcoholItem => { %>
+                <option value="<%= alcoholItem.alcohol_id %>"><%= alcoholItem.alcoholType %></option>
+                <% }); %>
+              </select><br>
+
+              <label for="selectFoodType">Food Selection:</label>
+              <select name="food_id" id="food_id">
+                <option value="">Please select your food choice</option>
+                <% food.forEach(foodItem => { %>
+                <option value="<%= foodItem.food_id %>"><%= foodItem.foodType %></option>
+                <% }); %>
+              </select><br>
+              <button class="btn btn-primary add-event-button" type="button">ADD TO CART</button>
+          </form>
+        
+        
+        </div>
+        <div class="cart-section">
+          <h2>Shopping Cart</h2>
+          
+          <div class="cart-items">
+          <!--Dynamically populated from script-->
+          </div>
+
+          <div class="cart-total">
+            <strong class="cart-total-title">Total</strong>
+            <strong class="cart-total-price">R 0</strong>
+          </div>
+          <button class="submit-cart"  id="submitCart" type="button">Submit Cart</button>
+        </div>
+      
       </div>
-    </section>
-    
-  
-</section>
-  <div class="form-container">
-  <form class="booking-form login" action="/submit_booking" method="post">
-    <h2>Booking Form</h2>
-      <label for="name">Name:</label>
-      <input type="text" name="name" id="name" placeholder = "Required" required><br>
+      <div id="opaque-ribbon">
 
-      <label for="surname">Surname:</label>
-      <input type="text" name="surname" id="surname" placeholder = "Required" required><br>
-
-      <label for="contactNumber">Contact Number:</label>
-      <input type="text" name="contactNumber" id="contactNumber"placeholder = "Required"  required><br>
-
-      <label for="email">Email:</label>
-      <input type="email" name="email" id="email" placeholder = "Required" required><br>
-
-
-<label for="event_id">Event:</label>
-<select name="event_id" id="event_id" required>
-  <option value="">Please select an event.</option>
-  <% events.forEach(event => { %>
-    <option value="<%= event.event_id %>"><%= event.eventType %></option>
-  <% }); %>
-</select><br>
-
-<label for="selectBoothType">Booking Type:</label>
-<select name="booth_id" id="booth_id" required>
-  <option value="">Please select a booth.</option>
-  <% booths.forEach(booth => { %>
-    <option value="<%= booth.booth_id %>"><%= booth.boothType%> Seater</option>
-  <% }); %>
-</select><br>
-
-<label for="selectAlcoholType">Alcohol Selection:</label>
-<select name="alcohol_id" id="alcohol_id" required>
-  <option value="">Please select alcohol package</option>
-  <% alcohol.forEach(alcoholItem => { %>
-    <option value="<%= alcoholItem.alcohol_id %>"><%= alcoholItem.alcoholType %></option>
-  <% }); %>
-</select><br>
-
-<label for="selectFoodType">Food Selection:</label>
-<select name="food_id" id="food_id">
-  <option value="">Please select your food choice</option>
-  <% food.forEach(foodItem => { %>
-    <option value="<%= foodItem.food_id %>"><%= foodItem.foodType %></option>
-  <% }); %>
-</select><br>
-<button class="btn btn-primary add-event-button" type="button">ADD TO CART</button>
-  </form>
-  
-  
-  </div>
-  <div class="login cart-section">
-    <h2>Shopping Cart</h2>
-    
-    <div class="cart-items">
-      
-    </div>
-    
-      
-  
-    <div class="cart-total">
-      <strong class="cart-total-title">Total</strong>
-      <strong class="cart-total-price">R 0</strong>
-    </div>
-    <button class="submit-cart"  id="submitCart" type="button">Submit Cart</button>
-  </div>
-   
-  </div>
-  </div>
-  <!--<button class="test" id="test">Test</button>-->
-  
-  
-  
-</body>
+      </div>
+  </div>  
+  </body>
 
 </html>

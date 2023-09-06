@@ -106,6 +106,7 @@ function addItemsToCart(){
     var boothIDValue = boothID.value;
     var alcoholIDValue = alcoholID.value;
     var foodIDValue = foodID.value;
+    var eventIDValue = eventID.value
     
 
     if(eventIDValue !== "" & boothIDValue !== "" & alcoholIDValue !== ""
@@ -143,7 +144,7 @@ function addItemsToCart(){
     }
 
     console.log(recordForDb);
-
+    clearForm();
 }
 
 async function submitCart(){
@@ -158,7 +159,8 @@ async function submitCart(){
     }});
     alert("Thank you for placing a booking. For more informtaion please contact Cellars at 078 555 2525.")
     clearCart()
-    updateCartTotal()    
+    updateCartTotal()
+    clearForm();    
 }
 
 function completePurchase(){
@@ -172,6 +174,9 @@ function clearCart() {
     while (cartItems.hasChildNodes()) {
         cartItems.removeChild(cartItems.firstChild);
     }
+}
+function clearForm(){
+    document.getElementById("booking-form").reset(); 
 }
 
 function createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSelected, alcoholPrice, foodPrice, eventIDValue, boothIDValue, alcoholIDValue){
@@ -251,7 +256,7 @@ async function fetchData(){
     fetch('/get_images')
       .then(response => response.json())
       .then(data => {
-        //console.log(data);
+        console.log("Fetched Data: ", data);
         populateSlideshow(data)
     })
     
@@ -259,8 +264,9 @@ async function fetchData(){
 
 function populateSlideshow(images) {
     const slideshowContainer = document.getElementById("slide-images");
-    console.log(slideshowContainer);
+    console.log("Slideshow container: ",slideshowContainer);
     fileNames = images[0];
+    console.log("file names: ",fileNames)
     for(i = 0; i < fileNames.length; i++){
         console.log(i);
         console.log(fileNames[i].file_path);
@@ -273,6 +279,7 @@ function populateSlideshow(images) {
         img.className = "slide";
         
         slideshowGroup.append(img);
+        console.log("Slideshow Group", slideshowGroup)
         slideshowContainer.append(slideshowGroup);
         slideAnimation()
     }

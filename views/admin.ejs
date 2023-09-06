@@ -14,7 +14,7 @@
   <div id="bookingInfo">
   <h1>Booking Details</h1>
   <div id="bookingForm">
-  <form class="event-form" action="/event_detail" method="post">
+  <form id="bookingForm-Form" class="event-form" action="/event_detail" method="post">
     <select name="event_id" id="event_id" required>
         <option value="">Please select an event.</option>
         <% events.forEach(event => { %>
@@ -57,7 +57,7 @@
 <div id="uploadEvents">
   <h1>Upload Event</h1>
   <div id="eventUpload">
-    <form action="/uploadEvent"method="Post" enctype="multipart/form-data">
+    <form id="uploadEventForm" action="/uploadEvent"method="Post" enctype="multipart/form-data">
       <label for="eventName">Event Name: </label>
       <input type="text" name="eventName" id="eventName" required>
       <label for="eventDate">Event Date: </label>
@@ -74,7 +74,7 @@
 <div id="advertisingUpload">
   <h1>Upload Adverts</h1>
   <div id="advertUpload">
-    <form action="/upload-advertisement" method="POST" enctype="multipart/form-data">
+    <form id="uploadAdvertisingForm" action="/upload-advertisement" method="POST" enctype="multipart/form-data">
 
       <label for="name">Enter Advertising Name or Description:</label>
       <input type="text" name="name" id="name" placeholder="Advertisement Name" required>
@@ -94,7 +94,7 @@
 <div id="photoAlbumUploads">
   <h1>Upload Photos Albums</h1>
   <div id="photoUpload">
-    <form action="/upload-photo-album" method="POST" enctype="multipart/form-data">
+    <form id="uploadPhotoForm" action="/upload-photo-album" method="POST" enctype="multipart/form-data">
       <fieldset id="eventSection">
 
         <select name="event_id" id="event_id" required>

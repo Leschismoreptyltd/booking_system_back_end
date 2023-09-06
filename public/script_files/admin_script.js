@@ -65,6 +65,7 @@ if(document.readyState == "loading"){
       })
       .then(res => res.json())
       .then(data => console.log(data));
+      //document.getElementById("uploadAdvertisingForm").reset(); 
 
     }
 
@@ -75,12 +76,16 @@ if(document.readyState == "loading"){
     }
 
     async function uploadEvents(event){
-
-      event.preventDefault()
+    
+      //event.preventDefault()
       const eventName = document.getElementById("eventName");
       const eventDate = document.getElementById("eventDate");
       const file = document.getElementById("posterFileUpload")
       const eventDescription = document.getElementById("eventDescription");
+      const eventUploadTextInput = document.getElementById("eventName")
+      const eventUploadDateInput = document.getElementById("eventDate")
+      //const eventUploadFileInput = document.getElementById("posterFileUpload")
+      const eventUploadTextField = document.getElementById("eventDescription")
       
       const formData = new FormData()
 
@@ -89,14 +94,33 @@ if(document.readyState == "loading"){
       formData.append("eventDescription", eventDescription.value);
       formData.append("file", file.files[0]);
       console.log(...formData);
+      
+      console.log("Text Input: ",eventUploadTextInput, "Date Input: ", eventUploadDateInput, "File Input: ", file, "Text Field Input: ", eventUploadTextField)
+      if(file.files.length>0){
+        window.alert("Event was created successfully!");
+      }else{
+        window.alert("Event creation was unsuccessful!");
+      }
+      clearInputs(eventUploadTextInput, eventUploadDateInput, file, eventUploadTextField);
 
       await fetch("/uploadEvent",{
         method: "POST",
         body: formData,
       })
       .then(res => res.json())
-      .then(data => console.log(data));       
+      .then(data => console.log(data));
+
+     
     
+    }
+
+    function clearInputs(textInput, dateInput, fileInput, textFieldInput){
+      console.log("Clear Inputs Data: ",textInput, dateInput, fileInput, textFieldInput )
+      textInput.value = "";
+      fileInput.value = null;
+      dateInput.value = "";
+      textFieldInput.value = "";
+
     }
     
 
@@ -109,9 +133,9 @@ if(document.readyState == "loading"){
       fetch('/bookings')
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+            console.log(data);
   // Use the data here
-})
+          })
     }
     function getEventDate(){
         var eventChange = event.target;
@@ -140,3 +164,7 @@ if(document.readyState == "loading"){
 
 
     }
+
+    function clearForm(){
+      document.getElementById("bookingForm-Form").reset(); 
+  }
