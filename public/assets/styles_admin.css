@@ -18,6 +18,12 @@ table {
     position: relative;
     margin-top: 3rem;
   }
+  .tableCaption{
+    text-align: left;
+    margin-bottom: 15px;
+    font-size: 20px;
+    margin-top: -15px;
+  }
   tbody th {
     width: calc(100% - 12rem);
   }
@@ -81,6 +87,7 @@ select{
 
   body{
     visibility:hidden;
+    border:transparent;
   }
   #bookingsTable{
         font-size: 13;
@@ -88,9 +95,10 @@ select{
         position: absolute;
         left: 0;
         top: 0;
+        border:transparent;
     }
     @page{
-      size:landscape;
+      size:portrait;
     }
     
 }

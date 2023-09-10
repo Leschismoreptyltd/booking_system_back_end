@@ -1,20 +1,22 @@
-
+<!-- bookings.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>Booking Details</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Page</title>
+  <title>Booking Details</title>
   <link rel="stylesheet" href="/public/assets/styles_admin.css">
   <script src="/public/script_files/admin_script.js" async></script>
   
+
 </head>
 <body>
   <div id="bookingInfo">
   <h1>Booking Details</h1>
   <div id="bookingForm">
-  <form id="bookingForm-Form" class="event-form"  method="post">
+  <form class="event-form" action="/event_detail" method="post">
     <select name="event_id" id="event_id" required>
         <option value="">Please select an event.</option>
         <% events.forEach(event => { %>
@@ -23,58 +25,73 @@
       </select><br>
       <input type="hidden" name="event_name" id="event_name">
       <input type="hidden" name="event_date" id="event_date">
-      
+      <button id="submitButton" type="submit">View Bookings</button>
   </form>
-  <button id="submitButton" >View Bookings</button>
-  </div>
-  <!--<button id="showEvents">Show Bookings</button>-->
+</div>
   
   <div id="bookingsTable">
-  <table id = bookingTable>
-    <!--<div id="tableCaption">
-      <caption><h1>Date:</h1></caption>
-      <caption><h1>Event Name:</h1></caption>
-    </div>-->
-    <thead>
+  <table>
+    <thead class="addHere">
+      
         <tr>
             <th>Name</th>
+            <th>Event</th>
+            <th>Event Date</th>
             <th>Booking type</th>
             <th>Pax</th>
             <th>Alcohol Package</th>
+            <th>Alcohol Price</th>
             <th>Food Package</th>
+            <th>Food Price</th>
             <th>Contact Number</th>
+            <!--<th>Email</th>
+            <th>Date Booked</th>-->
             <th>Total</th>
         </tr>
     </thead>
     <tbody id="tableBody">
-        
+      <% for (const booking of bookings) { %>
+        <tr>
+            <td><%= booking.Name %></td>
+            <td><%= booking.Event %></td>
+            <%const eventDate = new Date(booking["Booking Date"]); %>
+            <td><%= eventDate.toLocaleDateString() %></td>
+            <td><%= booking['Booking type'] %></td>
+            <td><%= booking.Pax %></td>
+            <td><%= booking['Alcohol Package'] %></td>
+            <td>R <%=  booking['Alcohol Price'] %></td>
+            <td><%= booking['Food Package'] %></td>
+            <td>R <%=  booking['Food Price'] %></td>
+            <td><%= booking['Contact Number'] %></td>
+            <td>R <%=  booking.Total %></td>
+        </tr>
+    <% } %>
     </tbody>
 </table>
-
 </div>
 <button id="printButton" class="btn btn-primary" type="button">Print Bookings</button>
 </div>
-<div id="uploadEvents">
+ <div id="uploadEvents">
   <h1>Upload Event</h1>
   <div id="eventUpload">
-    <form id="uploadEventForm" action="/uploadEvent"method="Post" enctype="multipart/form-data">
-      <label for="eventName">Event Name: </label>
-      <input type="text" name="eventName" id="eventName" placeholder="Event Name" required>
-      <label for="eventDate">Event Date: </label>
-      <input type="date" name="eventDate" id="eventDate" required>
-      <label for="poasterFileUpload">File Upload: </label>
-      <input type="file" accept="image/*" id="posterFileUpload" name="posterFileUpload" required>
-      <label for="eventDescription">Event Description: </label>
-      <textarea name="eventDescription" id="eventDescription" cols="50" rows="10"></textarea>
-    </form>
-    <button id="uploadEvent">Upload</button>
-  </div>
+  <form action="/uploadEvent" method="Post" enctype="multipart/form-data">
+    <label for="eventName">Event Name: </label>
+    <input type="text" name="eventName" id="eventName" required>
+    <label for="eventDate">Event Date: </label>
+    <input type="date" name="eventDate" id="eventDate" required>
+    <label for="posterFileUpload">File Upload: </label>
+    <input type="file" accept="image/*" id="posterFileUpload" name="posterFileUpload" required>
+    <label for="eventDescription">Event Description: </label>
+    <textarea name="eventDescription" id="eventDescription" cols="50" rows="10"></textarea>
+  </form>
+  <button id="uploadEvent">Upload</button>
 </div>
+ </div>
 
-<div id="advertisingUpload">
+ <div id="advertisingUpload">
   <h1>Upload Adverts</h1>
   <div id="advertUpload">
-    <form id="uploadAdvertisingForm" action="/upload-advertisement" method="POST" enctype="multipart/form-data">
+    <form action="/upload-advertisement" method="POST" enctype="multipart/form-data">
 
       <label for="name">Enter Advertising Name or Description:</label>
       <input type="text" name="name" id="name" placeholder="Advertisement Name" required>
@@ -94,12 +111,12 @@
 <div id="photoAlbumUploads">
   <h1>Upload Photos Albums</h1>
   <div id="photoUpload">
-    <form id="uploadPhotoForm" action="/upload-photo-album" method="POST" enctype="multipart/form-data">
+    <form action="/upload-photo-album" method="POST" enctype="multipart/form-data">
       <fieldset id="eventSection">
 
-        <select name="photo_upload_event_id" id="photo_upload_event_id" required>
+        <select name="event_id" id="event_id" required>
         <option value="">Please select an event.</option>
-        <% pastEvents.forEach(event => { %>
+        <% events.forEach(event => { %>
           <option value="<%= event.event_id %>"><%= event.eventType %></option>
         <% }); %>
       </select><br>
@@ -118,5 +135,6 @@
   <button  id="submitPhotoUpload">Upload</button>
   </div>
 </div>
+
 </body>
 </html>

@@ -38,6 +38,7 @@ export async function getBookingInfo(name,surname){
 
     return row;
 }
+
 export async function getBookingInfoByID(bookingId){
     const [row] = await pool.query("SELECT\
         CONCAT(name, ' ', surname) AS Name,\
@@ -108,6 +109,7 @@ export async function getEventById(event_id){
     throw error;
 }
 }
+
 export async function getBoothById(booth_id){
     try{
         const [row]= await pool.query("SELECT * FROM booth_info WHERE booth_id = ?", [booth_id])
@@ -121,6 +123,7 @@ export async function getBoothById(booth_id){
         throw error;
     }
 }
+
 export async function getAlcoholById(alcohol_id){
     try{
         const [row]= await pool.query("SELECT * FROM alcohol_selection WHERE alcohol_id = ?", [alcohol_id])
@@ -134,6 +137,7 @@ export async function getAlcoholById(alcohol_id){
         throw error;
     }
 }
+
 export async function getFoodById(food_id){
     try{ const [row]= await pool.query("SELECT * FROM food_selection WHERE food_id = ?", [food_id])
     if (row.length === 0) {
@@ -147,17 +151,19 @@ export async function getFoodById(food_id){
 }
 }
 
-//export async function createBooking(event_id, booth_id, alcohol_id, food_id, name, surname, contact, email){
-  //  const results = await pool.query("INSERT INTO booking \
-    //(event_id, booth_id, alcohol_id, food_id, name, surname, contact_number, email, booking_date)\
-    //VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURDATE())", [event_id, booth_id, alcohol_id, food_id, name, surname, contact, email]  
-    //);
-    //return results;
-//}
-
 export async function getEventDetails() {
     try{
     const [results] = await pool.query("SELECT event_id, event_date, CONCAT(event_name, '  ', CONVERT(event_date, CHAR)) AS eventType FROM event_info WHERE event_date >= CURDATE()");
+    return results;
+    }
+    catch(error){
+        console.error("Error fetching events: ", error);
+        throw error;
+    }
+}
+export async function getPassedEventDetails() {
+    try{
+    const [results] = await pool.query("SELECT event_id, event_date, CONCAT(event_name, '  ', CONVERT(event_date, CHAR)) AS eventType FROM event_info WHERE event_date >= DATE_SUB(CURDATE(), INTERVAL 3 WEEK)");
     return results;
     }
     catch(error){
@@ -178,6 +184,7 @@ export async function getBoothDetails(){
    
 export async function getTest(event_id){
     try{
+        //const results = await pool.query(`SELECT * FROM event_info WHERE event_id = ?`,[event_id])
     const[results] = await pool.query(`SELECT
     CONCAT(b.name, ' ', b.surname) AS "Name",
     e.description AS "Event",
@@ -285,6 +292,7 @@ export async function addEvent(eventDate, eventName, description, posterPath){
 } 
 
 export async function addAdvertising(name, fileName, startDate, endDate){
+    
     try{
     const rows = await pool.query('INSERT INTO advertisements (name, file_path, display_start_date, display_end_date ) VALUES (?, ?, ?, ?)', [name, fileName, startDate, endDate]);
     return rows;
@@ -292,6 +300,18 @@ export async function addAdvertising(name, fileName, startDate, endDate){
     console.log("Error in fetching booth details: ", error)
     throw error;
     }
+}
+
+export async function addPhotos(eventName, eventId, eventDate, imageFile){
+
+    try{
+        const rows = await pool.query("INSERT INTO photo_album (event_name, event_id, event_date, image_file_name) VALUES (?, ?, ?, ?)", [eventName, eventId, eventDate, imageFile]);
+        return rows;
+        } catch{
+        console.log("Error in fetching booth details: ", error)
+        throw error;
+        }
+    
 }
 
 export async function getAdvertisingImages(){
@@ -304,9 +324,10 @@ export async function getAdvertisingImages(){
         throw error;
         }
 }
+
 export async function getEventImageFileName(){
     try{
-        const rows = await pool.query(`SELECT event_date, poster_path FROM event_info
+        const rows = await pool.query(`SELECT event_id, event_name, description, poster_path FROM event_info
         WHERE event_date >= CURDATE();`);
         return rows;
     }catch{
@@ -314,12 +335,3 @@ export async function getEventImageFileName(){
         throw error;  
     }
 }
-
-
-
-
-     
-//const results = await createBooking(3, 2, 3, 1, "Lauren", "Lesch", "079-886-2083", "leschismorewithlauren@gmail.com")
-//console.log(results);
-//const result = await getBookingInfo("Lauren", "Lesch")
-//console.log(result);

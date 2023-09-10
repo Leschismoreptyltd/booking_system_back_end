@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", ready)
 } else {
     ready();
 }
+
 function ready(){
 
     var removeCartItemButtons = document.getElementsByClassName("btn-danger");
@@ -32,8 +33,32 @@ function ready(){
     
     //Slideshow prep and initiate
     fetchData();
+
+    window.addEventListener("load", getEventId)
+
     
        
+}
+
+function getEventId(){
+    const eventId = getQueryParams("event_id");
+    console.log("Event ID: ", eventId);
+    const eventSelect = document.getElementById("event_id");
+    if (eventId === null){
+
+        eventSelect.text = "";
+
+    } else{
+        
+        eventSelect.value = eventId;
+    }
+    getAvailableBooths()
+    
+}
+
+function getQueryParams(name){
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
 }
 
  function removeCartItem(event){
@@ -163,10 +188,10 @@ async function submitCart(){
     clearForm();    
 }
 
-function completePurchase(){
+/*function completePurchase(){
     submitCart
     clearCart
-}
+}*/
 function clearCart() {
 
     var cartItems = document.getElementsByClassName("cart-items")[0];
@@ -224,11 +249,15 @@ function createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSele
 }
 
 function getAvailableBooths(){
-    var selectedEventId = event.target.value; // Get the selected event ID
-   // console.log(selectedEventId);
+    //var selectedEventId = event.target.value; // Get the selected event ID
+    const selectEventId = document.getElementById('event_id')
+
+    console.log("Event ID: ", selectEventId);
+    var EventId = selectEventId.value;
+    console.log("Event ID from Option element: ", EventId)
 
 // Make an AJAX request to the server to fetch the available booths for the selected event
-    fetch(`/getAvailableBooths?eventId=${selectedEventId}`)
+    fetch(`/getAvailableBooths?eventId=${EventId}`)
     .then(response => response.json()) // Parse the JSON response
     .then(data => {
     //console.log(data);
@@ -264,12 +293,12 @@ async function fetchData(){
 
 function populateSlideshow(images) {
     const slideshowContainer = document.getElementById("slide-images");
-    console.log("Slideshow container: ",slideshowContainer);
+    //console.log("Slideshow container: ",slideshowContainer);
     fileNames = images[0];
-    console.log("file names: ",fileNames)
+    //console.log("file names: ",fileNames)
     for(i = 0; i < fileNames.length; i++){
-        console.log(i);
-        console.log(fileNames[i].file_path);
+        //console.log(i);
+        //console.log(fileNames[i].file_path);
         const slideshowGroup = document.createElement("div");
         slideshowGroup.className = "img-container";
 
@@ -279,7 +308,7 @@ function populateSlideshow(images) {
         img.className = "slide";
         
         slideshowGroup.append(img);
-        console.log("Slideshow Group", slideshowGroup)
+       // console.log("Slideshow Group", slideshowGroup)
         slideshowContainer.append(slideshowGroup);
         slideAnimation()
     }

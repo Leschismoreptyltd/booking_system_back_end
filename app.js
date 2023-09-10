@@ -23,7 +23,9 @@ import {getBookings, getBookingInfo,
     addEvent,
     addAdvertising,
     getAdvertisingImages,
-    getEventImageFileName} from "./db.js"
+    getEventImageFileName,
+    addPhotos,
+    getPassedEventDetails} from "./db.js"
     import path from'path'
     //import {generatePDF} from "./pdf.js";
 
@@ -68,17 +70,19 @@ app.get("/make-bookings", async (req, res) => {
     }
 });
 
-app.get("/make_booking", async (req,res) =>{
-    const mkBookings = await populateEventDropBox()
-    const events = mkBookings;
-    res.render("booking", {events})
+app.get("/make_bookings/:event_id", async (req,res) =>{
+  try{
+    const events = await getEventDetails();
+    const booths = await getBoothDetails();
+    const alcohol = await getAlcohol();
+    const food = await getFood();
+    res.render("booking", { events, booths, alcohol, food });
+    //console.log(events, booths, alcohol, food)
+    }catch(error){
+        console.error("Error rendering booking: ", error);
+        res.sendStatus(500)
+    }
 });
-
-//app.get("/bookings/:id", async (req, res) =>{
-//    const id = req.params.id
-//    const booking = await getSpecBooking(id)
-//    res.send(booking)
-//})
 
 app.get("/booking-detail/:name,:surname", async (req, res) =>{
     
@@ -132,7 +136,8 @@ app.get("/admin_login", async (req,res) =>{
 app.get("/admin", async (req, res) =>{
   try{
     const events = await getEventDetails();
-  res.render("admin" ,{events})
+    const pastEvents = await getPassedEventDetails();
+  res.render("admin" ,{events, pastEvents})
   }catch(error){
     console.error("Error rendering booking: ", error);
     res.sendStatus(500)
@@ -175,8 +180,29 @@ app.get("/get_posters", async (req, res) =>{
   res.send(results);
 })
 
-app.post("/event_detail", async (req, res) =>{
-  const eventID = req.body.event_id;
+app.post("/events_table", async (req, res) =>{
+  try{
+    //const bodyEventID = req.body;
+    const eventID = req.body.event_id;
+    //console.log("req.body: ", bodyEventID);
+    //const eventID = bodyEventID.event_Id
+
+    console.log("Event ID:", eventID);
+
+    var results = await getSpecBooking(eventID);
+
+    console.log("Query Result:", results[0])
+
+    res.send(results)
+
+  }catch{
+    console.error("Error rendering booking: ", error);
+    res.sendStatus(500)
+  }
+})
+
+/*app.post("/event_detail", async (req, res) =>{
+  const eventID = req.body.eventId;
   console.log("ID: ", eventID);
   try{
     const bookingDetails = await getSpecBooking(eventID);
@@ -193,7 +219,7 @@ app.post("/event_detail", async (req, res) =>{
     res.sendStatus(500)
 }
 
-});
+});*/
 
 app.post("/login_admin", async (req, res) =>{
 
@@ -275,6 +301,7 @@ app.post("/uploadEvent", upload.single("file"), async (req, res) =>{
   
 });
 
+
 app.post("/upload-advertisement", upload.array("files", 20), async (req, res) =>{
 
   const body = req.body;
@@ -296,7 +323,22 @@ app.post("/upload-advertisement", upload.array("files", 20), async (req, res) =>
 
 });
 
-app.post("/upload-photo-album", async (req, res) =>{
+app.post("/upload-photo-album", upload.array("files", 50), async (req, res) =>{
+
+  const body = req.body;
+  const fileNames = req.files.map(file =>file.filename);
+  const eventName = body.event_name;
+  const stringEventID = body.event_id;
+  const eventID = parseInt(stringEventID)
+  const eventDate = body.event_date;
+
+  console.log("Event Name: ", eventName, "\nEvent ID: ", eventID, "\nEvent Date: ", eventDate)
+  console.log("File Names: ", fileNames);
+
+  for (let i = 0; i < fileNames.length; i++){
+    addPhotos(eventName, eventID, eventDate, fileNames[i]);
+  }
+
 });
 
 app.listen(process.env.PORT, ()=>{

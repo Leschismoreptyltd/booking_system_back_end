@@ -39,10 +39,9 @@ html {
 #top-right-ribbon{
   position:absolute;
   width:100%;
-  height:100%;
   background-image: url("/public/resources/andrew-kliatskyi-DGXdp29Y5cc-unsplash.jpg");
   opacity: 0.2;
-  border: 2px solid white;
+ /* border: 2px solid white;*/
 }
 .header{
   display: flex;
@@ -57,18 +56,8 @@ html {
   aspect-ratio: 1/1;
  
 }
-.logo{
-margin: auto;
-position: relative;
-width: 300px;
-height:300px;
-display: flex;
-}
-img{
-margin:auto;
-object-fit:contain;
-width:100%;
-}
+
+
 h1{
   font-size: 3.5rem;
   white-space: wrap;
@@ -87,12 +76,12 @@ position: absolute;
   padding: 10px;
   flex-wrap: wrap; 
   overflow: auto; 
-  border: 2px solid white;  
+  /*border: 2px solid white; */
 }
 
 
 .image-view{
-  border:2px solid white;
+  /*border:2px solid white;*/
   display: grid;
   gap: 1rem;
   grid-auto-flow: column;
@@ -110,7 +99,7 @@ position: absolute;
 }
 .event-card > .event-poster > img{
   inline-size:100%;
-  aspect-ratio: 1/1;
+  aspect-ratio: 1200/1600;
   object-fit: cover;
 }
 .snaps-inline{
@@ -120,4 +109,48 @@ position: absolute;
 
 .snaps-inline > *{
   scroll-snap-align: start;
+}
+.event-card h2{
+  margin:1rem;
+  color: white;
+  font-size: 25px;
+}
+.event-card h3{
+  margin: 1rem;
+  color: white;
+  font-size: 15px;
+}
+
+a{
+  text-decoration: none;
+  color:inherit;
+  margin-top: 10px;
+}
+button{
+  margin-top:10px;
+}
+
+.event-details{
+  /*border:2px white solid;*/
+  width: 380px; 
+  height:95px; 
+}
+/*neo morhpism*/
+#book-now{
+  position: relative;
+  /*bottom: -570px;*/
+  width:100px;
+  height:25px;
+  background: var(--home-bg-color);
+  color: white;
+  border-radius: 9999px;
+
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.8), -5px -3px 15px rgba(255,255, 255,0.8);
+}
+
+#book-now:hover{
+  color: rgb(190, 190, 190);
+  box-shadow: 3px 3px 5px rgba(0,0,0,0.6), -3px -3px 5px rgba(255,255,255,0.25),
+  inset -2px -2px 5px rgba(0,0,0,1), inset 2px 2px 4px rgba(255,255,255,0.3);
+
 }
