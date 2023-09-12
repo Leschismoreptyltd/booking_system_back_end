@@ -1,5 +1,6 @@
 var recordForDb = []
 var dataIndex =0;
+var cartData = [];
   
 if(document.readyState == "loading"){
 document.addEventListener("DOMContentLoaded", ready)
@@ -183,8 +184,9 @@ async function submitCart(){
       'Content-Type': 'application/json'
     }});
     alert("Thank you for placing a booking. For more informtaion please contact Cellars at 078 555 2525.")
-    clearCart()
-    updateCartTotal()
+    recordForDb.length = 0; 
+    clearCart();
+    updateCartTotal();
     clearForm();    
 }
 
@@ -205,6 +207,7 @@ function clearForm(){
 }
 
 function createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSelected, alcoholPrice, foodPrice, eventIDValue, boothIDValue, alcoholIDValue){
+    var userName = recordForDb["userName"];
     var cartEntry = document.createElement("div");
     cartEntry.classList.add("cart-row");
     var cartItems = document.getElementsByClassName("cart-items")[0];
@@ -225,6 +228,7 @@ function createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSele
     cartEntry.innerHTML = cartEntryContents;
     cartItems.append(cartEntry);
     cartEntry.getElementsByClassName("btn-danger")[0].addEventListener("click", removeCartItem);
+    
     }
     else{
         var totalPrice = alcoholPrice + foodPrice
@@ -241,11 +245,12 @@ function createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSele
         `
         cartEntry.innerHTML = cartEntryContents;
         cartItems.append(cartEntry);
-        cartEntry.getElementsByClassName("btn-danger")[0].addEventListener("click", removeCartItem); 
+        cartEntry.getElementsByClassName("btn-danger")[0].addEventListener("click", removeCartItem);
+         
     }
     dataIndex ++;
     console.log("Data Index after added item: ", dataIndex, "event_id: ", eventIDValue, "booth_id: ", boothIDValue, "alcohol_id: ", alcoholIDValue);
-     
+    console.log("Cart Data: ", cartData); 
 }
 
 function getAvailableBooths(){

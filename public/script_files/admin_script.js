@@ -5,14 +5,10 @@ if(document.readyState == "loading"){
         ready();
     }
     function ready(){
-        //const eventSelect = document.getElementById('event_id');
-        //eventSelect.addEventListener("change", getEventDate);
+        
 
         const buttonPopulateTable = document.getElementById("submitButton");
-        buttonPopulateTable.addEventListener("click", fetchBookedEventData)
-
-        /*const showBookingsButton = document.getElementById("showEvents");
-        showBookingsButton.addEventListener("click", showBookings);*/
+        buttonPopulateTable.addEventListener("click", fetchBookedEventData);
 
         const uploadEventsButton = document.getElementById("uploadEvent");
         uploadEventsButton.addEventListener("click", uploadEvents)
@@ -34,6 +30,7 @@ if(document.readyState == "loading"){
     //start here
 
     function populateEventsTable(bookedEventData){
+      
       var captionDisplayed = false;
       console.log("Table Populate");
       console.log("Data From Back end: ", bookedEventData);
@@ -96,10 +93,20 @@ if(document.readyState == "loading"){
 
         tableRow.innerHTML = tableContent;
         tableBody.append(tableRow);
+        tableEntry = true
+      
 
       });
     
     }
+    function clearTable() {
+
+      var tableBody = document.getElementsById("tableBody");
+      //console.log(cartItems);
+      while (tableBody.hasChildNodes()) {
+          cartItems.removeChild(tableBody.firstChild);
+      }
+  }
 
     async function fetchBookedEventData(event){
       const eventIdButton = event.target

@@ -197,8 +197,23 @@ form > label {
 
 .add-event-button, .submit-cart{
    margin-top:20px;
+   position: relative;
+   /*bottom: -570px;*/
+   width:150px;
+   height:25px;
+   background: var(--home-bg-color);
+   color: white;
+   border-radius: 9999px;
+ 
+   box-shadow: 5px 5px 15px rgba(0,0,0,0.8), -5px -3px 15px rgba(255,255, 255,0.8);
 
 }
+.add-event-button:hover, .submit-cart:hover{
+    color: rgb(190, 190, 190);
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.6), -3px -3px 5px rgba(255,255,255,0.25),
+    inset -2px -2px 5px rgba(0,0,0,1), inset 2px 2px 4px rgba(255,255,255,0.3);
+  
+  }
 
 .booking-heading {
     position: relative;

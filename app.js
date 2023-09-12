@@ -5,6 +5,7 @@ dotenv.config();
 import bodyParser from "body-parser";
 import { fileURLToPath } from 'url';
 import multer from "multer";
+import nodemailer from "nodemailer";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -44,7 +45,23 @@ app.use(session({
  
 
 const upload = multer({dest: __dirname + "/uploads"});
-app.use('/uploads', express.static('uploads')); 
+app.use('/uploads', express.static('uploads'));
+
+//Configure nodemailer with SMTP details
+const transporter = nodemailer.createTransport({
+  service: process.env.EMAIL_SERVER_ADDRESS,
+  auth:{
+    user: process.env.EMAIL_USERNAME,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
+const mailTemplate = `
+<h1>Booking Confirmation</h1>
+  <p>Name: {{ name }}</p>
+  <p>Email: {{ email }}</p>
+  <p>Event Details: {{ eventDetails }}</p>
+  <!-- Add more booking details here -->`;
 
 
 app.get("/", (req, res) =>{
@@ -340,6 +357,11 @@ app.post("/upload-photo-album", upload.array("files", 50), async (req, res) =>{
   }
 
 });
+
+app.post("/sendEmail", async (req, res) => {
+
+
+})
 
 app.listen(process.env.PORT, ()=>{
     console.log("Server is running on port 3000")

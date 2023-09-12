@@ -39,8 +39,6 @@ function changeSlide(e){
     }
     slides.children[newIndex].dataset.active = true;
     delete activeSlide.dataset.active
-    console.log("New Index after click: ", newIndex)
-
-    
+    console.log("New Index after click: ", newIndex);    
 
 }

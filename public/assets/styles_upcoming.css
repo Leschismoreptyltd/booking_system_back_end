@@ -100,7 +100,7 @@ position: absolute;
 .event-card > .event-poster > img{
   inline-size:100%;
   aspect-ratio: 1200/1600;
-  object-fit: cover;
+  object-fit: contain;
 }
 .snaps-inline{
   scroll-snap-type: inline mandatory;
@@ -154,3 +154,5 @@ button{
   inset -2px -2px 5px rgba(0,0,0,1), inset 2px 2px 4px rgba(255,255,255,0.3);
 
 }
+
+/*New Text Effects*/
