@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import { fileURLToPath } from 'url';
 import multer from "multer";
 import nodemailer from "nodemailer";
+import wbm from "wbm";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -42,26 +43,51 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
- 
+
+
 
 const upload = multer({dest: __dirname + "/uploads"});
 app.use('/uploads', express.static('uploads'));
 
 //Configure nodemailer with SMTP details
 const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVER_ADDRESS,
+  service: process.env.EMAIL_SERVICE,
+  port: 465, 
+  secure: true,
+  logger: true,
+  debug: true,
+  secureConnection: false,
   auth:{
     user: process.env.EMAIL_USERNAME,
     pass: process.env.EMAIL_PASSWORD,
   },
 });
 
-const mailTemplate = `
-<h1>Booking Confirmation</h1>
-  <p>Name: {{ name }}</p>
-  <p>Email: {{ email }}</p>
-  <p>Event Details: {{ eventDetails }}</p>
-  <!-- Add more booking details here -->`;
+async function mailIt(mailTo, bookingName, bookingSurname, contactNumber, bookingEvent,
+  bookingType, bookingAlcohol, bookingFood, bookingTotal){
+
+  const info = await transporter.sendMail({
+    from: "LeschisMore <ddlesch88@gmail.com>", // sender address
+    to: mailTo, // list of receivers
+    subject: "Booking Confirmation", // Subject line
+    text: "This serves as an email to confirm the booking made at Cellars.", // plain text body
+    html: `
+    <h1> Booking Confirmation:</h1>
+    <h5>Name: <span>${bookingName}</span></h5>
+    <h5>Surname: <span>${bookingSurname}</span><h5/>
+    <h5>Contact Number: <span>${contactNumber}</span><h5/>
+    <h5>Event: <span>${bookingEvent}</span><h5/>
+    <h5>Booking Type: <span>${bookingType}</span><h5/>
+    <h5>Alcohol: <span>${bookingAlcohol}</span><h5/>
+    <h5>Food: <span>${bookingFood}</span><h5/>
+    <h5>Total R: <span>${bookingTotal}</span><h5/>
+    `, // html body
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  
+}
+
 
 
 app.get("/", (req, res) =>{
@@ -278,11 +304,23 @@ app.post('/submit_booking', async (req, res) => {
     const email = booking.email;
     const contactNumber = booking.contactNumber;
     const event_id = booking.eventIDValue;
+    const eventSelected = booking["eventSelected"];
     const booth_id = booking.boothIDValue;
+    const boothSelected = booking["boothSelected"];
     const alcohol_id = booking.alcoholIDValue;
+    const alcoholSelected = booking["alcoholSelected"];
     const food_id = booking.foodIDValue;
+    const foodSelected = booking["foodSelected"];
+    const totalPrice = booking["totalPrice"]
     console.log("Booking Values:", event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email);
-    return createBooking(event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email)
+    createBooking(event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email)
+    console.log("Email Details: \nName: ", name, "\nSurname: ", surname, "\ncontactNumber: ", contactNumber,
+     "\nEmail Address: ", email, "\nEvent: ", eventSelected, "\nBooking Type: ", boothSelected, "\nAlcohol Selection: ", alcoholSelected,
+     "\nFood Selected: ", foodSelected, "\nTotal Price: R", totalPrice);
+     var mailAddress = [process.env.EMAIL_USERNAME, email];
+     console.log ("Email Address Array", mailAddress, "User Name: ", name, "User Surname: ", surname)
+     mailIt(mailAddress, name, surname, contactNumber, eventSelected, boothSelected
+      , alcoholSelected, foodSelected, totalPrice).catch(console.error);
   })
   )
   

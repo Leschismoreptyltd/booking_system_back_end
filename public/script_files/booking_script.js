@@ -162,8 +162,10 @@ function addItemsToCart(){
         alcoholID.selectedIndex = 0;
         foodID.selectedIndex = 0;
         createCartEntry(eventSelected, boothSelected, alcoholSelected, foodSelected, alcoholPrice, foodPrice, eventIDValue, boothIDValue, alcoholIDValue);
+        var totalPrice = alcoholPrice + foodPrice
+        console.log("Alcohol Price: ", alcoholPrice, "\nFood Price: ", foodPrice,"Total Price: ", totalPrice)
         updateCartTotal();
-        recordForDb.push({userName, userSurname, email, contactNumber, eventIDValue, boothIDValue, alcoholIDValue, foodIDValue});
+        recordForDb.push({userName, userSurname, email, contactNumber, eventIDValue, eventSelected, boothIDValue, boothSelected, alcoholIDValue, alcoholSelected, foodIDValue, foodSelected, totalPrice});
     
     } else{
         alert("Please ensure that all the required fields are entered.");
