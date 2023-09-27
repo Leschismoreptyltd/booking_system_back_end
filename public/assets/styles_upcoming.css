@@ -17,6 +17,8 @@
   --box-shadow: 0px 0px 3px 5px var(--box-shadow-color);
   --border-radius: 60px 5px;
   --fade-green: rgba(30, 39, 32, 0.55);
+  --font-color: rgba(209, 191, 146,1);
+  --font-color-hover: #a28834;
 }
 *,
 *::before,
@@ -56,7 +58,14 @@ html {
   aspect-ratio: 1/1;
  
 }
-
+.upcoming_heading{
+  position: relative;
+  white-space: wrap;
+  cursor: pointer;
+  background: var(--font-color);
+  margin: 20px;
+  height:80px;
+}
 
 h1{
   font-size: 3.5rem;
@@ -64,7 +73,6 @@ h1{
   color: black;
   margin: 20px;
   text-decoration: underline;
-  background:white;
 }
 #top-right-ribbon{
 position: absolute;
@@ -98,7 +106,8 @@ position: absolute;
   border-radius: 10px;
 }
 .event-card > .event-poster > img{
-  inline-size:100%;
+  inline-size:95%;
+  margin:10px;
   aspect-ratio: 1200/1600;
   object-fit: contain;
 }
@@ -112,12 +121,12 @@ position: absolute;
 }
 .event-card h2{
   margin:1rem;
-  color: white;
+  color: var(--font-color);
   font-size: 25px;
 }
 .event-card h3{
   margin: 1rem;
-  color: white;
+  color: var(--font-color);
   font-size: 15px;
 }
 
@@ -142,14 +151,13 @@ button{
   width:100px;
   height:25px;
   background: var(--home-bg-color);
-  color: white;
+  color: var(--font-color);
   border-radius: 9999px;
-
   box-shadow: 5px 5px 15px rgba(0,0,0,0.8), -5px -3px 15px rgba(255,255, 255,0.8);
 }
 
 #book-now:hover{
-  color: rgb(190, 190, 190);
+  color: var(--font-color-hover);
   box-shadow: 3px 3px 5px rgba(0,0,0,0.6), -3px -3px 5px rgba(255,255,255,0.25),
   inset -2px -2px 5px rgba(0,0,0,1), inset 2px 2px 4px rgba(255,255,255,0.3);
 

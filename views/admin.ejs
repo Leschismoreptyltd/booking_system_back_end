@@ -109,10 +109,13 @@
     </fieldset>
 
     <fieldset id="uploadSection">
-
-      <label for="photoAlbumFileUpload">Select Photos for Album</label>
-      <input type="file" id="photoAlbumFileUpload" name="photoAlbumFileUpload" multiple accept="image/*">
-
+      <div class="photo-album">
+        <label for="photoAlbumFileUpload">Select Photos for Album: </label>
+        <input type="file" id="photoAlbumFileUpload" name="photoAlbumFileUpload" multiple accept="image/*">
+        <label for="photoAlbumCoverUpload">Select a Cover Photo: </label>
+        <img src="img.jpeg">
+        <input type="file" name="photoAlbumCoverUpload" id="photoAlbumCoverUpload">
+      </div>
     </fieldset>
   </form>
   <button  id="submitPhotoUpload">Upload</button>

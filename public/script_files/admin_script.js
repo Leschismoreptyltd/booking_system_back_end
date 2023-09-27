@@ -25,6 +25,10 @@ if(document.readyState == "loading"){
         const uploadPhotosButton = document.getElementById("submitPhotoUpload")
         uploadPhotosButton.addEventListener("click", uploadPhotos)
         console.log(uploadPhotosButton);
+
+        const input = document.querySelector(".photo-album #photoAlbumCoverUpload")
+
+        input.addEventListener("change", getPhotoCover)
               
     }
     //start here
@@ -146,6 +150,7 @@ if(document.readyState == "loading"){
       var eventID = parseInt(stringEventID);
       var eventSelected = htmlSelector.selectedIndex;
       var imageFiles = document.getElementById("photoAlbumFileUpload")
+      var coverPhoto = document.getElementById("photoAlbumCoverUpload")
       //eventID.selectedIndex = 0;
       if (eventSelected !=-1){
 
@@ -167,6 +172,8 @@ if(document.readyState == "loading"){
       for(i = 0; i < imageFiles.files.length; i++ ){
         formData.append("files", imageFiles.files[i]);
       }
+      formData.append("files", coverPhoto.files[0]);
+  
 
       console.log(...formData)
 
@@ -316,6 +323,13 @@ if(document.readyState == "loading"){
       tableEntry.innerHTML = tableContents;
 
 
+    }
+    //photo album cover preview
+    function getPhotoCover(){
+      const image = document.querySelector(".photo-album img");
+      const input = document.querySelector(".photo-album #photoAlbumCoverUpload")
+      console.log(image);
+      image.src = URL.createObjectURL(input.files[0])
     }
 
     function clearForm(){

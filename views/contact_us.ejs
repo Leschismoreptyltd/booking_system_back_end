@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="/public/assets/styles_menu.css">
+    <link rel="stylesheet" href="/public/assets/styles_contact_us.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="/public/script_files/contact_us_script.js" async></script>
+</head>
+<body>
+    <div class="menubar">
+        <input type="checkbox" id="ham-menu">
+        <label for="ham-menu">
+          <div class="hide-des">
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+          </div>     
+        </label>
+
+        <div class="full-page-green"></div>
+        <div class="ham-menu">
+          <ul class="centre-text bold-text">
+            <li><img src="/public/logos/cellars-logo-gold-website - 2.png" alt=""></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="make-bookings">Bookings</a></li>
+            <li><a href="upcoming">Upcoming Events</a></li>            
+            <li><a href="photo_gallery">Photo Gallery</a></li>
+            <!--<li>Support</li>-->
+            <li><a href="admin_login">Admin</a></li>
+        
+          </ul>
+        </div>
+    </div>
+
+      <div class="header over-ribbon">
+        <img src="/public/logos/cellars-logo-gold-website - 2.png" alt="">
+        <div class="booking-heading"><h1>Contact Us</h1></div>
+      </div>
+      <div id="mainContainer">
+
+        <div class="details" id="contactDetails">
+            <div class="contactDetails" id="physicalAddress">
+                <h2>Physical Address:</h2>
+                <h3>Cellars Paarl</h3>
+                <p>Odeon Centre</p>
+                <p>138 Lady Grey Street</p>
+                <p>Paarl</p>
+                <p>7646</p>
+            </div>
+            <div class="contactDetails" id="telEmail">
+                <h2>Contact Details:</h2>
+                <p>Tel: 083 296 0111</p>
+                <p>Email: info@cellarspaarl.co.za</p>
+            </div>            
+
+            <div class="contactDetails" id="socialMedia">
+                <h2>Social Media:</h2>
+                <p>Follow us on Facebook and Instagram.</p>
+
+                    <div class="social-buttons">   
+                        
+                    <!-- facebook  Button -->
+                            <a href="http://www.facebook.com" target="blank" class="social-margin"> 
+                            <div class="social-icon facebook">
+                                <i class="fa fa-facebook" aria-hidden="true"></i> 
+                            </div>
+                            </a>                                                      
+                    <!-- Instagram Button -->
+                            <a href="http://instagram.com/" target="blank" class="social-margin">
+                            <div class="social-icon instagram">
+                                <i class="fa fa-instagram" aria-hidden="true"></i>
+                            </div> 
+                            </a>
+                    </div>
+
+            </div>
+
+            
+        </div>
+
+        <div class="details" id="mapDetails">
+            <h2>Come visit us...</h2>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3318.157015213057!2d18.968202452240302!3d-33.73075573632414!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1dcda822f3dea161%3A0x963874bd5dd9b2!2sCellars%20Paarl!5e0!3m2!1sen!2sza!4v1694595708563!5m2!1sen!2sza" 
+            width="400" height="350" style="border: 2px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+        </div>
+
+        <div class="details" id="formDetails">
+
+            <form id="contactUsForm" action="/send_message" method="post" >
+                <p>We art Cellars Paarl pride oursleve to ensure that you have an experience worthy of kings and queens. 
+                    Please leave a message should you require any information or if you want to
+                    let us know about your experience at our establishment</p>
+                <label for="userName">Name:</label>
+                <input type="text" name="userName" id="userName" placeholder="Required" required>
+                <label for="userSurname">Surname:</label>
+                <input type="text" name="userSurname" id="userSurname" placeholder="Required" required>
+                <label for="userContactNumber">Contact Number:</label>
+                <input type="tel" name="userContactNumber" id="userContactNumber" placeholder="Required" required >
+                <label for="userEmail">Email:</label>
+                <input type="email" name="userEmail" id="userEmail" placeholder="Required" required>
+                <label for="userSubject">Subject</label>
+                <input type="text" name="userSubject" id="userSubject" placeholder="Required" required>
+                <label for="userMessage">Message:</label>
+                <textarea name="userMessage" id="userMessage" cols="30" rows="10"></textarea>
+                
+            </form>
+            <button id="userFormButton" type="submit">Send Message</button>
+
+        </div>
+
+    </div>
+    
+</body>
+</html>

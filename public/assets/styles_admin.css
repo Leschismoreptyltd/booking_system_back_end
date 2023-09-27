@@ -102,3 +102,11 @@ select{
     }
     
 }
+
+/*photo gallery upload styling*/
+.photo-album img{
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  background:#ddd;
+}

@@ -27,7 +27,10 @@ import {getBookings, getBookingInfo,
     getAdvertisingImages,
     getEventImageFileName,
     addPhotos,
-    getPassedEventDetails} from "./db.js"
+    getPassedEventDetails,
+    addCoverPicture,
+  getPhotoAlbum,
+  getCoverPhotos} from "./db.js"
     import path from'path'
     //import {generatePDF} from "./pdf.js";
 
@@ -63,7 +66,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function mailIt(mailTo, bookingName, bookingSurname, contactNumber, bookingEvent,
+async function mailConfirmation(mailTo, bookingName, bookingSurname, contactNumber, bookingEvent,
   bookingType, bookingAlcohol, bookingFood, bookingTotal){
 
   const info = await transporter.sendMail({
@@ -86,6 +89,23 @@ async function mailIt(mailTo, bookingName, bookingSurname, contactNumber, bookin
 
   console.log("Message sent: %s", info.messageId);
   
+}
+
+async function mailContactUs(backOfficeEmail, userName, userSurname, userContactNumber, userEmail, msgSubject, msgBody){
+  const info = transporter.sendMail({
+    from: "LeschisMore <ddlesch88@gmail.com>", // sender address
+    to: backOfficeEmail, // list of receivers
+    subject: msgSubject, // Subject line
+    text: "Message Sent from Contact Us Page", // plain text body
+    html: `
+    <h1> ${msgSubject}</h1>
+    <h5>Name: <span>${userName}</span></h5>
+    <h5>Surname: <span>${userSurname}</span><h5/>
+    <h5>Contact Number: <span>${userContactNumber}</span><h5/>
+    <h5>Contact Number: <span>${userEmail}</span><h5/>
+   <p> ${msgBody}</p>
+    `, // html body
+  }) 
 }
 
 
@@ -217,10 +237,24 @@ app.get("/get_images", async (req, res) =>{
   res.send(results);
 });
 
+app.get("/contact_us", async (req, res) =>{
+
+  res.render("contact_us");
+})
+
 app.get("/get_posters", async (req, res) =>{
   const results = await getEventImageFileName();
   console.log("Event Results", results[0]);
   res.send(results);
+})
+
+app.get("/getPhotoAlbum", async (req, res) =>{
+  const photoCovers = await getCoverPhotos();
+  console.log("Photo Covers: ", photoCovers);
+  const photoAlbum = await getPhotoAlbum();
+  console.log("Photo Album: ", photoAlbum)
+  const photoData = [photoCovers[0], photoAlbum[0]]
+  res.send(photoData);
 })
 
 app.post("/events_table", async (req, res) =>{
@@ -299,27 +333,33 @@ app.post('/submit_booking', async (req, res) => {
   //console.log(bookings);
   Promise.all(
   bookings.map(booking => {
-    const name = booking.userName;
-    const surname = booking.userSurname;
-    const email = booking.email;
-    const contactNumber = booking.contactNumber;
-    const event_id = booking.eventIDValue;
+    const name = booking["userName"];
+    const surname = booking["userSurname"];
+    const email = booking["email"];
+    const contactNumber = booking["contactNumber"];
+    const event_id = booking["eventIDValue"];
     const eventSelected = booking["eventSelected"];
-    const booth_id = booking.boothIDValue;
+    const booth_id = booking["boothIDValue"];
     const boothSelected = booking["boothSelected"];
-    const alcohol_id = booking.alcoholIDValue;
+    const alcohol_id = booking["alcoholIDValue"];
     const alcoholSelected = booking["alcoholSelected"];
-    const food_id = booking.foodIDValue;
+    const food_id = booking["foodIDValue"];
     const foodSelected = booking["foodSelected"];
     const totalPrice = booking["totalPrice"]
+
     console.log("Booking Values:", event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email);
+    
     createBooking(event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email)
+    
     console.log("Email Details: \nName: ", name, "\nSurname: ", surname, "\ncontactNumber: ", contactNumber,
      "\nEmail Address: ", email, "\nEvent: ", eventSelected, "\nBooking Type: ", boothSelected, "\nAlcohol Selection: ", alcoholSelected,
      "\nFood Selected: ", foodSelected, "\nTotal Price: R", totalPrice);
-     var mailAddress = [process.env.EMAIL_USERNAME, email];
+     
+    var mailAddress = [process.env.EMAIL_USERNAME, email];
+     
      console.log ("Email Address Array", mailAddress, "User Name: ", name, "User Surname: ", surname)
-     mailIt(mailAddress, name, surname, contactNumber, eventSelected, boothSelected
+     
+    mailConfirmation(mailAddress, name, surname, contactNumber, eventSelected, boothSelected
       , alcoholSelected, foodSelected, totalPrice).catch(console.error);
   })
   )
@@ -356,7 +396,6 @@ app.post("/uploadEvent", upload.single("file"), async (req, res) =>{
   
 });
 
-
 app.post("/upload-advertisement", upload.array("files", 20), async (req, res) =>{
 
   const body = req.body;
@@ -386,21 +425,41 @@ app.post("/upload-photo-album", upload.array("files", 50), async (req, res) =>{
   const stringEventID = body.event_id;
   const eventID = parseInt(stringEventID)
   const eventDate = body.event_date;
+  const coverPicture = 1;
 
   console.log("Event Name: ", eventName, "\nEvent ID: ", eventID, "\nEvent Date: ", eventDate)
   console.log("File Names: ", fileNames);
 
-  for (let i = 0; i < fileNames.length; i++){
+  for (let i = 0; i < fileNames.length -1; i++){
     addPhotos(eventName, eventID, eventDate, fileNames[i]);
   }
+  console.log(fileNames[fileNames.length-1])
+  addCoverPicture(eventName, eventID, eventDate,fileNames[fileNames.length-1], coverPicture)
 
 });
 
-app.post("/sendEmail", async (req, res) => {
+app.post("/send_message", async (req, res) => {
+  const sendForm = req.body[0];
+  const userName = sendForm["userName"];
+  const userSurname = sendForm["userSurname"];
+  const userContactNumber = sendForm["userContactNumber"];
+  const userEmail = sendForm["userEmail"];
+  const userSubject = sendForm["userSubject"];
+  const userMessage = sendForm["userMessage"];
+ 
+  console.log("Form Details: ", sendForm);
+
+  console.log("User Name: ",userName, "\nUser Surname: ", userSurname
+  , "\nUser Contact Number: ", userContactNumber, "\nUser Email: ", userEmail,
+  "\nUser Subject: ", userSubject,"\nUser Message: ",   userMessage)
+
+  const mailAddress = process.env.EMAIL_USERNAME;
+  mailContactUs(mailAddress, userName, userSurname, userContactNumber, 
+    userEmail, userSubject, userMessage).catch(console.error)
 
 
 })
 
-app.listen(process.env.PORT, ()=>{
+app.listen(process.env.PORT, () => {
     console.log("Server is running on port 3000")
 });

@@ -1,0 +1,344 @@
+:root{
+    --gen-fnt-color:white;
+    --greenSeaweed: rgba(2, 128, 144, 1);
+    --blueQueen: rgba(69, 105, 144, 1);
+    --redFire: rgb(0, 0, 0);
+    --home-bg-color: #000000;
+    --menu-bg-color: #d3d3d3;
+    --silde-btn-border: #777777;
+    --slide-btn-bg: #d3d3d3;
+    --slide-btn-hoverbg: #f1fff1;
+    --alpha-green: rgba(91, 33, 96, 0.51);
+    --icon-hover-color: #474747;
+    --icon-hover-bg: #bec0bf;
+    --text-color: #3b3a3a;
+    --border-color: #c3c5c4;
+    --heading-color: #797979;
+    --box-shadow-color: #b5b5ac;
+    --lightest-green: #b1b1b1;
+    --light-green: #9ab09a;
+    --dark-green: rgba(0, 0, 0, 0.86);
+    --box-shadow: 0px 0px 3px 5px var(--box-shadow-color);
+    --border-radius: 60px 5px;
+    --fade-green: rgba(30, 39, 32, 0.55);
+    --font-color: rgba(209, 191, 146,1);
+    --font-color-hover: #a28834;
+}
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+  }
+  body,
+  html {
+    width: 100%;
+    font-size: 10px;
+    color: var(--font-color);
+    font-weight: normal;
+    font-family: "Montserrat", sans-serif;
+    background-color: var(--home-bg-color);
+  }
+  #opaque-ribbon{
+    position: absolute;
+    top:0;
+    width:100%;
+    height:200%;
+    background-image: url("/public/resources/andrew-kliatskyi-DGXdp29Y5cc-unsplash.jpg");
+    opacity: 0.2;
+  }
+.menubar, .header{
+    background: transparent;
+  }
+  h1{
+    font-size: 3.5rem;
+    white-space: wrap;
+    color: black;
+    margin: 20px;
+    text-decoration: underline;
+}
+
+  .title {
+    font-size: 3rem;
+    line-height: 1.5em;
+    word-spacing: 0.5em;
+    letter-spacing: 0.1em;
+    font-family: "OpenSansCondensed-Bold", sans-serif;
+    color: var(--icon-hover-bg);
+    padding: 10px;
+  }
+  
+.header{
+    display: flex;
+    justify-content: space-around;
+    
+}
+  
+.header img{
+    position: relative;
+    background: black;
+    top:0;
+    width:150px;
+    aspect-ratio: 1/1;
+   
+}
+
+#mainContainer{
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px;
+    overflow: auto;
+    gap: 50px;
+
+}
+
+.booking-heading {
+    position: relative;
+    white-space: wrap;
+    cursor: pointer;
+    background:var(--font-color);
+    margin: 20px;
+    height:80px;
+    
+}
+
+/*Contact Details Styling*/
+#contactDetails{
+    /*border: 2px white solid;
+    position: relative;*/
+    width: 300px;
+    height: 600px;
+}
+
+/*Social link Styling*/
+
+.contactDetails{
+    color:var(--font-color);
+    padding: 15px;
+    line-height: 1.3;
+}
+
+.contactDetails h2{
+    font-size: 18px;
+}
+.contactDetails > h3{
+  font-size: 16px;
+}
+.contactDetails p{
+    font-size: 14px;
+}
+
+    
+.social-buttons{
+    display:flex;
+    justify-content: space-around;
+    padding-top:20px;
+    padding-bottom: 5px;
+    border-radius:10px;
+    text-align:center;
+    margin:20px 10px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.8), -5px -3px 15px rgba(255,255, 255,0.8);
+  }
+  .social-margin {
+    margin-right: 15px;
+  }
+  .social-margin:last-child{
+    margin-right:0;
+  }
+
+  a,
+a:hover,
+a:focus,
+a:active {
+  text-decoration: none;
+}
+
+.social-icon {
+    margin-bottom: 15px;
+     box-sizing: border-box;
+    -moz-border-radius: 138px;
+    -webkit-border-radius: 138px;
+    border-radius: 138px;
+    border: 5px solid;
+    text-align: center;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    line-height: 1px;
+    padding-top: 11px;
+    transition: all 0.5s;
+  }
+  .social-icon:hover {
+      transform: rotate(360deg)scale(1.3);
+    }
+
+    .facebook {
+        font-size: 22px;
+        padding-top: 9px;
+        border-color: #3b5998;
+        background-color: #3b5998;
+        color: #ffffff;
+       
+      }
+      .facebook:hover {
+        background-color: #ffffff;
+        color: #3b5998;
+      }
+      .instagram{
+        font-size: 22px;
+        padding-top: 9px;
+        border-color: #e1306c;
+        background-color: #e1306c;
+        color: #ffffff;
+      }
+
+      .instagram:hover{
+        background-color: #ffffff;
+        color: #e1306c;
+      }
+
+/*Map styling*/
+#mapDetails{
+    display: flex;
+    /*align-content: row;*/
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*justify-content: center;*/
+    /*border: 2px white solid;*/
+    position: relative;
+    width: 400px;
+    height: 400px;
+}
+
+#mapDetails > h2{
+    position:relative;
+    font-size: 18px;
+    color: var(--font-color);
+    left:0;
+    top:0;
+    padding: 15px;
+}
+#mapDetails > iframe{
+    position: relative;
+    padding: 0px 15px 15px 15px;
+}
+
+
+
+/*Form Styling*/
+#formDetails{
+    /*border: 2px white solid;
+    position: relative;*/
+    width: 300px;
+    height: 600px;
+    color: var(--font-color);
+}
+#formDetails p{
+    font-size:14px;
+    line-height: 1.3;
+}
+form {
+    width: 30vw;
+    background-color:transparent;
+    padding-left: 2em;
+    padding-right:2em;
+    padding-top: 1em;
+    padding-bottom:1.5em;
+    border-radius: 5px;
+    /*border:3px solid white;*/
+    
+}
+
+.booking-form h2{
+    margin:0;
+}
+
+    
+input,
+select, textarea{
+  margin: 10px;
+  width: 100%;
+  min-height: 2em;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.85);
+  padding-left:10px;
+}
+
+textarea{
+  font-size: 14px;
+  line-height: 1.2;
+  padding-top:10px;
+  font-weight: normal;
+  font-family: "Montserrat", sans-serif;
+}
+/* Apply a common style to labels */
+form > label {
+    margin-top: 5px;
+    display: block;
+    margin-bottom: 2px;
+    color: var(--font-color);
+    font-size: 15px;
+}
+
+/* Apply style to the submit button */
+
+#userFormButton{
+  margin:15px;
+   position: relative;
+   /*bottom: -570px;*/
+   width:150px;
+   height:25px;
+   background: var(--home-bg-color);
+   color: var(--font-color);
+   border-radius: 9999px;
+ 
+   box-shadow: 5px 5px 15px rgba(0,0,0,0.8), -5px -3px 15px rgba(255,255, 255,0.8);
+
+}
+#userFormButton:hover{
+    color: var(--font-color-hover);
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.6), -3px -3px 5px rgba(255,255,255,0.25),
+    inset -2px -2px 5px rgba(0,0,0,1), inset 2px 2px 4px rgba(255,255,255,0.3);
+  
+  }
+
+  
+
+
+  /*.wrapper.button:hover{
+    width:200px;
+  }
+  .wrapper.button.icon{
+    display: inline-block;
+    height: 60px;
+    width: 60px;
+    text-align: center;
+    border-radius: 50px;
+    box-sizing: border-box;
+    line-height: 60px;
+    transition: all 0.3s ease-out;
+  }
+
+  .wrapper.button:nth-child(1) hover.icon{
+    background: #4267b2;
+  }
+  .wrapper.button:nth-child(2) hover.icon{
+    background: #e1306c;
+  }
+
+  .wrapper.button.icon i{
+    font-size: 25px;
+    line-height: 60px;
+    transition: all 0.3s ease-out
+  }
+
+  .wrapper.button:nth-child(1) span{
+    color: #4267b2;
+  }
+  .wrapper.button:nth-child(2) span{
+    color: #e1306c;
+  }*/
+  
+  

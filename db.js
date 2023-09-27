@@ -308,10 +308,19 @@ export async function addPhotos(eventName, eventId, eventDate, imageFile){
         const rows = await pool.query("INSERT INTO photo_album (event_name, event_id, event_date, image_file_name) VALUES (?, ?, ?, ?)", [eventName, eventId, eventDate, imageFile]);
         return rows;
         } catch{
-        console.log("Error in fetching booth details: ", error)
+        console.log("Error in fetching photo details: ", error)
         throw error;
         }
     
+}
+export async function addCoverPicture(eventName, eventId, eventDate, coverPhotoName, coverPicture){
+    try{
+        const rows = await pool.query("INSERT INTO photo_album (event_name, event_id, event_date, image_file_name, cover_picture) VALUES (?, ?, ?, ?, ?)", [eventName, eventId, eventDate, coverPhotoName, coverPicture])
+        return rows;
+    } catch{
+        console.log("Error in fetching cover photo", error);
+        throw error;
+    }
 }
 
 export async function getAdvertisingImages(){
@@ -333,5 +342,27 @@ export async function getEventImageFileName(){
     }catch{
         console.log("Error in fetching booth details: ", error)
         throw error;  
+    }
+}
+
+export async function getCoverPhotos(){
+    try{
+        const rows = await pool.query("SELECT * FROM photo_album WHERE event_date >= DATE_SUB(NOW(), INTERVAL 4 WEEK) AND cover_picture = 1;")
+        return rows;
+        console.log(rows);
+
+    }catch{
+        console.log("Error fetching cover photos", error)
+        throw error;
+    }
+}
+
+export async function getPhotoAlbum(){
+    try{
+        const rows = await pool.query("SELECT * FROM photo_album WHERE event_date >= DATE_SUB(NOW(), INTERVAL 4 WEEK) AND cover_picture = 0;")
+        return rows
+    }catch{
+        console.log("Error fetching photo album", error)
+        throw error;
     }
 }
