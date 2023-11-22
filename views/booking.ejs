@@ -7,6 +7,7 @@
     <title>Event Bookings</title>
     <link rel="stylesheet" href="/public/assets/styles_booking.css" type="text/css">
     <link rel="stylesheet" href="/public/assets/styles_menu.css" type="text/css">
+    <script src="https://www.paypal.com/sdk/js?client-id=<%=paypalClientId %>"></script>
     <script src="/public/script_files/booking_script.js" async></script>
   </head>
 
@@ -41,7 +42,14 @@
       </div>
       <div class="header over-ribbon">
         <img src="/public/logos/cellars-logo-gold-website - 2.png" alt="">
-        <div class="booking-heading"><h1>Event Bookings</h1></div>
+        <div class="booking-heading">
+          <h1>Event Bookings</h1>
+          <div class="circles cl"id="c1"></div>
+          <div class="circles cl"id="c2"></div>
+          <div class="circles cr"id="c3"></div>
+          <div class="circles cr"id="c4"></div>
+          
+        </div>
       </div>
 
       <div class="main-container over-ribbon" id="over-ribbon">
@@ -131,6 +139,10 @@
             <strong class="cart-total-price">R 0</strong>
           </div>
           <button class="submit-cart"  id="submitCart" type="button">SUBMIT CART</button>
+          <div id="payPalPortal"></div>
+          <div id="payFastPortal">
+            
+          </div>
         </div>
       
       </div>

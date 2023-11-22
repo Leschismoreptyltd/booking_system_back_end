@@ -233,7 +233,7 @@ export async function getFood(){
     }
 }
 
-export async function createBooking(event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email ){
+export async function createBooking(event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email, qrCode ){
     try {
         let foodValue;
         if (food_id.trim()==""){

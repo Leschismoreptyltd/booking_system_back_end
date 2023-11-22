@@ -60,11 +60,12 @@ html {
 }
 .upcoming_heading{
   position: relative;
-  white-space: wrap;
-  cursor: pointer;
-  background: var(--font-color);
-  margin: 20px;
-  height:80px;
+    white-space: wrap;
+    margin: 20px;
+    height:80px;
+    background: var(--font-color);
+    border-radius: 5%;
+    box-shadow: rgba(226, 212, 11, 0.65) 10px 0px 120px -25px, rgba(226, 223, 6, 0.9) -30px 30px 35px -25px;
 }
 
 h1{

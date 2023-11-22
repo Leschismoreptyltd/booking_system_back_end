@@ -28,7 +28,8 @@
             <li><img src="/public/logos/cellars-logo-gold-website - 2.png" alt=""></li>
             <li><a href="/">Home</a></li>
             <li><a href="make-bookings">Bookings</a></li>
-            <li><a href="upcoming">Upcoming Events</a></li>            
+            <li><a href="upcoming">Upcoming Events</a></li> 
+            <li><a href="contact_us">Contact Us</a></li>           
             <!--<li>Support</li>-->
             <li><a href="admin_login">Admin</a></li>
         
@@ -43,12 +44,23 @@
 
       <div class="main_container">
         <div id="paragraph-block">
+            <div id="paragraph">
+                <h5 id="booking-terms-heading">Memories in the Making:</h5>
+                <p>At Cellars, we pride oursleves on offering you the best experience in the Boland.
+                Memories of the Cellars legacy form part of our foundation and giving our kings and queens
+                the Cellars experience is our greatest desire. Take a trip down memory lane and remember 
+                those amazing care free nights. 
+            </p>
+            
+            </div>
 
         </div>
 
         <div class="advertising" id="advertising-placeholder">
             <div class="advertising-space" id="slider-frame">
-
+                <div id="slide-images">
+              
+                </div>
             </div>
         </div>
 <!--Duplicate from here...-->
@@ -61,7 +73,7 @@
                 <div class="event-card" id="event1-week1">
 
                     <div class="cover-photo">
-                        <a class="eventName" href="#"><img src="/uploads/f7944e4c4f0e198200993e51932715a7" alt="" id="eventName1"></a>
+                        <a class="eventClick" href="#"><img src="/uploads/f7944e4c4f0e198200993e51932715a7" alt="" id="eventName1"></a>
                     </div>
                     <div class="gallery">
     
@@ -154,10 +166,30 @@
                 </div>
             </div>
         </div> -->
-        
-        
+        </div>
+        <div id="photoAlbumContainer">
+            <div id="photoAlbum" data-carousel>
+                <button id="previousSlide" class = "carousel-button prev" data-carousel-button="prev">&#8656;</button>
+                <button id="nextSlide" class = "carousel-button next" data-carousel-button="next">&#8658;</button>
+                <span class="closeWindow" onclick="closeWindow()">X</span>
+                <img src="" alt="Nature Image #1" class="individualPhoto" id="individualPhoto">
+                <!--<ul id="unorderedPhotoList" data-slides>
+                    
+                    <li class="slide" data-active>
+                    <img src="/public/uploads/skyy-vodka.jpg" alt="Nature Image #1" class="individualPhoto">
+                    </li>
+                    <li class="slide">
+                    <img src="/public/uploads/redBull.jpg" alt="Jose Cuervo Picture" class="individualPhoto">
+                    </li>
+                    <li class="slide">
+                    <img src="/public/uploads/jose-cuervo.jpg" alt="Jose Cuervo Picture" class="individualPhoto">
+                    </li><li class="slide">
+                    <img src="/public/uploads/slide1.jpg.jpg" alt="Jose Cuervo Picture" class="individualPhoto">
+                    </li>
+                </ul>-->
+            </div>
 
-      </div>
+        </div>
     
 </body>
 </html>

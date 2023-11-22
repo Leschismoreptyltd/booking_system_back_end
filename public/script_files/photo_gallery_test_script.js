@@ -19,7 +19,7 @@ if(document.readyState == "loading"){
 function changeSlide(e){
     //e.preventDefault();
     console.log("Its working")
-    const buttonClicked = event.target
+    const buttonClicked = e.target
     console.log(buttonClicked)
     const offset = buttonClicked.dataset.carouselButton === "next" ? 1:-1;
     console.log("Offset: ",offset)

@@ -7,6 +7,10 @@ import { fileURLToPath } from 'url';
 import multer from "multer";
 import nodemailer from "nodemailer";
 import wbm from "wbm";
+import paypal from "@paypal/checkout-server-sdk"
+import CC from "currency-converter-lt"
+import QRCode from "qrcode";
+
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -52,6 +56,18 @@ app.use(session({
 const upload = multer({dest: __dirname + "/uploads"});
 app.use('/uploads', express.static('uploads'));
 
+//Seeting up paypal environment
+const Environment = 
+process.env.NODE_ENV === "production"
+    ?paypal.core.LiveEnvironment
+    :paypal.core.SandboxEnvironment
+const paypalClient = new paypal.core.PayPalHttpClient(
+    new Environment(
+        process.env.PAYPAL_CLIENT_ID, 
+        process.env.PAYPAL_CLIENT_SECRET 
+        )
+    )
+
 //Configure nodemailer with SMTP details
 const transporter = nodemailer.createTransport({
   service: process.env.EMAIL_SERVICE,
@@ -67,8 +83,8 @@ const transporter = nodemailer.createTransport({
 });
 
 async function mailConfirmation(mailTo, bookingName, bookingSurname, contactNumber, bookingEvent,
-  bookingType, bookingAlcohol, bookingFood, bookingTotal){
-
+  bookingType, bookingAlcohol, bookingFood, bookingTotal, qrCodeData){
+    console.log("QR Code Data: ", qrCodeData)
   const info = await transporter.sendMail({
     from: "LeschisMore <ddlesch88@gmail.com>", // sender address
     to: mailTo, // list of receivers
@@ -77,13 +93,14 @@ async function mailConfirmation(mailTo, bookingName, bookingSurname, contactNumb
     html: `
     <h1> Booking Confirmation:</h1>
     <h5>Name: <span>${bookingName}</span></h5>
-    <h5>Surname: <span>${bookingSurname}</span><h5/>
-    <h5>Contact Number: <span>${contactNumber}</span><h5/>
-    <h5>Event: <span>${bookingEvent}</span><h5/>
-    <h5>Booking Type: <span>${bookingType}</span><h5/>
-    <h5>Alcohol: <span>${bookingAlcohol}</span><h5/>
-    <h5>Food: <span>${bookingFood}</span><h5/>
-    <h5>Total R: <span>${bookingTotal}</span><h5/>
+    <h5>Surname: <span>${bookingSurname}</span></h5>
+    <h5>Contact Number: <span>${contactNumber}</span></h5>
+    <h5>Event: <span>${bookingEvent}</span></h5>
+    <h5>Booking Type: <span>${bookingType}</span></h5>
+    <h5>Alcohol: <span>${bookingAlcohol}</span></h5>
+    <h5>Food: <span>${bookingFood}</span></h5>
+    <h5>Total R: <span>${bookingTotal}</span></h5>
+    <img src="${qrCodeData}" alt= "QR CODE Image"/>
     `, // html body
   });
 
@@ -110,6 +127,7 @@ async function mailContactUs(backOfficeEmail, userName, userSurname, userContact
 
 
 
+
 app.get("/", (req, res) =>{
 res.render("index")
 });
@@ -125,7 +143,8 @@ app.get("/make-bookings", async (req, res) => {
     const booths = await getBoothDetails();
     const alcohol = await getAlcohol();
     const food = await getFood();
-    res.render("booking", { events, booths, alcohol, food });
+    const paypalClientId = process.env.PAYPAL_CLIENT_ID
+    res.render("booking", { events, booths, alcohol, food, paypalClientId});
     //console.log(events, booths, alcohol, food)
     }catch(error){
         console.error("Error rendering booking: ", error);
@@ -139,7 +158,8 @@ app.get("/make_bookings/:event_id", async (req,res) =>{
     const booths = await getBoothDetails();
     const alcohol = await getAlcohol();
     const food = await getFood();
-    res.render("booking", { events, booths, alcohol, food });
+    paypalCientId = process.env.PAYPAL_CLIENT_ID;
+    res.render("booking", { events, booths, alcohol, food, paypalCientId });
     //console.log(events, booths, alcohol, food)
     }catch(error){
         console.error("Error rendering booking: ", error);
@@ -257,6 +277,83 @@ app.get("/getPhotoAlbum", async (req, res) =>{
   res.send(photoData);
 })
 
+//Paypal Payment gateway
+app.post("/payment-gateway", async (req, res) =>{
+  const results = req.body
+  const request = new paypal.orders.OrdersCreateRequest()
+  var totalZAR = 0
+  var details = []
+  results.forEach(result =>{
+  const userName = result["userName"];
+  const userSurname = result["userSurname"];
+  const eventSelected = result["eventSelected"];
+  const boothSelected = result["boothSelected"];
+  const alcoholSelected = result["alcoholSelected"];
+  const foodSelected = result["foodSelected"];
+  const totalPrice = result["totalPrice"];
+  totalZAR = totalZAR + totalPrice
+
+  console.log("results:", result, "\nUser Name: ", userName," ", userSurname, 
+  "\nEvent: ", eventSelected, "\nBooth Type: ", boothSelected, "\nAlcohol: ", alcoholSelected,
+   "\nFood: ", foodSelected, "\nTotal: R", totalZAR )
+  })
+
+  let currencyConverter = new CC({
+    from: "ZAR",
+    to: "USD",
+    isDecimalComma: true
+})
+
+let conversion = await currencyConverter.convert(totalZAR);
+  var totalUSD = conversion.toFixed(2);
+
+  console.log("Before Coversion: ", conversion, "Amount in Dollars: ",totalUSD)
+
+  request.prefer("return=representation")
+    request.requestBody({
+      intent: "CAPTURE",
+        purchase_units:[{
+          amount: {
+            currency_code: "USD",
+            value: totalUSD,
+            breakdown: {
+              item_total:{
+                currency_code: "USD",
+                value: totalUSD
+
+            },
+            },
+          },
+          transactions:[{
+            item_list:{
+              items: results.forEach(result =>{
+                return{
+                  name: result["eventSelected"],
+                  unit_amount: {
+                    currency_code: "USD",
+                    value: result["totalPrice"],
+                  },
+                  quantity: "1"
+                
+                }
+              }),
+            }
+          }]
+          
+
+        },
+      ],
+    })
+
+    try{
+      const order = await paypalClient.execute(request)
+        console.log("order: ",order);
+        res.json({id: order.result.id})
+    }catch(e){
+      res.status(500).json({error: e.message})
+  }
+})
+
 app.post("/events_table", async (req, res) =>{
   try{
     //const bodyEventID = req.body;
@@ -278,25 +375,6 @@ app.post("/events_table", async (req, res) =>{
   }
 })
 
-/*app.post("/event_detail", async (req, res) =>{
-  const eventID = req.body.eventId;
-  console.log("ID: ", eventID);
-  try{
-    const bookingDetails = await getSpecBooking(eventID);
-    const event_name = req.body.event_name;
-    const event_date = req.body.event_date;
-    const events = await getEventDetails();
-    console.log(bookingDetails);
-    console.log("Event Name: ", event_name, "Event Date: ", event_date);
-    console.log("Event name and date: ", event_name, event_date)
-    res.render("adminpop", { bookings: bookingDetails, events: events, eventName: event_name, eventDate: event_date });
-
-  }catch(error){
-    console.error("Error rendering booking: ", error);
-    res.sendStatus(500)
-}
-
-});*/
 
 app.post("/login_admin", async (req, res) =>{
 
@@ -332,7 +410,7 @@ app.post('/submit_booking', async (req, res) => {
   const bookings = req.body.recordForDb;
   //console.log(bookings);
   Promise.all(
-  bookings.map(booking => {
+  bookings.map(async booking => {
     const name = booking["userName"];
     const surname = booking["userSurname"];
     const email = booking["email"];
@@ -347,6 +425,14 @@ app.post('/submit_booking', async (req, res) => {
     const foodSelected = booking["foodSelected"];
     const totalPrice = booking["totalPrice"]
 
+    const qrData = name + surname + eventSelected + boothSelected + alcoholSelected + foodSelected 
+    const qrCodeData = await QRCode.toDataURL(qrData)
+    //console.log("QR Code Data: ", qrCodeData)
+    //const qrCodeToString = await QRCode.toString(qrCodeData)
+    //console.log("Data to String: ", qrCodeToString)
+    //const img = await QRCode.create(qrData);
+    //console.log("QR Image: ", img)
+
     console.log("Booking Values:", event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email);
     
     createBooking(event_id, booth_id, alcohol_id, food_id, name, surname, contactNumber, email)
@@ -360,7 +446,7 @@ app.post('/submit_booking', async (req, res) => {
      console.log ("Email Address Array", mailAddress, "User Name: ", name, "User Surname: ", surname)
      
     mailConfirmation(mailAddress, name, surname, contactNumber, eventSelected, boothSelected
-      , alcoholSelected, foodSelected, totalPrice).catch(console.error);
+      , alcoholSelected, foodSelected, totalPrice, qrCodeData).catch(console.error);
   })
   )
   

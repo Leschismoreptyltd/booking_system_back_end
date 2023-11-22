@@ -25,6 +25,7 @@ function ready(){
     }
     // Get a reference to the events dropdown
     const selectEvent = document.getElementById('event_id');
+    
     // Add an event listener to the events dropdown
     selectEvent.addEventListener("change", getAvailableBooths);
 
@@ -169,13 +170,51 @@ function addItemsToCart(){
     
     } else{
         alert("Please ensure that all the required fields are entered.");
+        return
     }
 
     console.log(recordForDb);
     clearForm();
 }
 
-async function submitCart(){
+function submitCart(){
+    if (recordForDb.length === 0){
+
+    alert("Please add items to the cart")
+
+    }else{console.log("Paypal window here")
+    console.log("Order Information: ", recordForDb)
+    paypal.Buttons({
+        createOrder: function() {
+
+            body = JSON.stringify(recordForDb)
+            console.log("body: ", body)
+            return fetch("/payment-gateway",{
+                method: "POST",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body: body,
+            }).then(res =>{
+                if (res.ok) return res.json()
+                return res.json().then(json => Promise.reject(json))
+                
+            }).then (({ id }) =>{
+                return id;
+            }).catch (e =>{
+                console.log(e.error)
+            })
+        },
+        onApprove: function(data, actions){
+            writeCartToDb()
+            return actions.order.capture()
+            
+              
+        }
+    }).render("#payPalPortal")
+}}
+
+async function writeCartToDb(){
 
     let body = JSON.stringify({recordForDb});
     //console.log("Body: ", body);
@@ -189,13 +228,15 @@ async function submitCart(){
     recordForDb.length = 0; 
     clearCart();
     updateCartTotal();
-    clearForm();    
+    clearForm();
+    clearPayPalDiv();    
 }
 
-/*function completePurchase(){
-    submitCart
-    clearCart
-}*/
+function clearPayPalDiv(){
+    var payPalDiv = document.getElementById("payPalPortal")
+    payPalDiv.style.display="none"
+}
+
 function clearCart() {
 
     var cartItems = document.getElementsByClassName("cart-items")[0];
@@ -306,17 +347,17 @@ function populateSlideshow(images) {
     for(i = 0; i < fileNames.length; i++){
         //console.log(i);
         //console.log(fileNames[i].file_path);
-        const slideshowGroup = document.createElement("div");
-        slideshowGroup.className = "img-container";
+        /*const slideshowGroup = document.createElement("div");
+        slideshowGroup.className = "img-container";*/
 
         const img = document.createElement("img");
         img.src = `/uploads/${fileNames[i].file_path}`;
         img.alt = "Advertising Image";
         img.className = "slide";
         
-        slideshowGroup.append(img);
+        //slideshowGroup.append(img);
        // console.log("Slideshow Group", slideshowGroup)
-        slideshowContainer.append(slideshowGroup);
+        slideshowContainer.append(img);
         slideAnimation()
     }
 
@@ -332,7 +373,7 @@ function slideAnimation(){
     }
 
     // Show the specified slide
-    slides[slideIndex].style.display = 'block';
+    slides[slideIndex].style.display = 'flex';
     }
 
     function nextSlide() {
